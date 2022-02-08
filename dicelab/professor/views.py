@@ -6,7 +6,7 @@ import json
 
 
 def professor(request):
-    set_data()
+    # set_data()
     db = Professor_Page_Code.objects.all()
     page = eval(db.values('body')[0]['body'])
     return render(request, 'professor.html', {'page': page})

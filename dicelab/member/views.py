@@ -10,8 +10,8 @@ def member(request):
     # 년도 선언
     current_year = datetime.now().year + 1
     year = [current_year-x for x in range(current_year - 2020 + 1)]
-    course_list = ['Ph.D. course', 'M.S.-Ph.D. integrated course',
-                   'B.S.-M.S. integrated', 'M.S. course']
+    course_list = ['Ph.D. Course', 'M.S.-Ph.D. Course',
+                   'B.S.-M.S. Course', 'M.S. Course']
     project = {}
     # Order
     preserved = Case(*[When(course=course, then=pos)
