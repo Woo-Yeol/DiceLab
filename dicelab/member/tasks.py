@@ -4,7 +4,7 @@ import urllib3
 from typing import Dict
 import json
 from json import loads
-from .models import Dissertation, Master, Research_interests, Linked, Graduated, Alumni, Team, Project
+from .models import Thesis, Master, Research_interests, Linked, Graduated, Alumni, Team, Project
 
 http = urllib3.PoolManager()
 Member_Graduate_Database_ID = getattr(
@@ -37,7 +37,7 @@ def set_data():
     linked_temp = []
     team_temp = []
     project_temp = []
-    dissertation_temp = []
+    thesis_temp = []
 
     # Data Create or Update
     # Graduate
@@ -97,11 +97,11 @@ def set_data():
         g.graduate_year = d['graduate_year']
         g.email = d['email']
         g.pic = d['pic']
-        if d['dissertation'] != None:
-            obj, created = Dissertation.objects.update_or_create(
-                title=d['dissertation'], paper_link=d['paper_link'], slide_link=d['slide_link'])
-            dissertation_temp.append(obj)
-            g.dissertation.add(obj)
+        if d['thesis'] != None:
+            obj, created = Thesis.objects.update_or_create(
+                title=d['thesis'], paper_link=d['paper_link'], slide_link=d['slide_link'])
+            thesis_temp.append(obj)
+            g.thesis.add(obj)
             g.save()
         g.linked.clear()
         if d['linked'] != None:
@@ -136,8 +136,8 @@ def set_data():
     for db in Project.objects.all():
         if not db.title in project_temp:
             Project.objects.get(title=db.title).delete()
-    for db in Dissertation.objects.all():
-        if not db in dissertation_temp:
+    for db in Thesis.objects.all():
+        if not db in thesis_temp:
             db.delete()
 
 
@@ -186,9 +186,9 @@ def load_notionAPI_member_master():
         except:
             graduate_year = ''
         try:
-            dissertation = r['properties']['dissertation']['select']['name']
+            thesis = r['properties']['thesis']['rich_text'][0]['plain_text']
         except:
-            dissertation = ''
+            thesis = ''
         try:
             email = r['properties']['email']['email'].replace("@", "'at'")
         except:
@@ -224,7 +224,7 @@ def load_notionAPI_member_master():
         data.append({
             'name': name,
             'graduate_year': graduate_year,
-            'dissertation': dissertation,
+            'thesis': thesis,
             'email': email,
             'linked': linked,
             'pic': pic,

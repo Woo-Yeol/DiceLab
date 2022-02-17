@@ -241,19 +241,19 @@
                 </div>
                 <div class="text card-body">
                     <ul>
-                        <li class="dissertation">
-                            <h6>Dissertation Title</h6>
+                        <li class="thesis">
+                            <h6>Thesis Title</h6>
                             <ul>
-                                {% for dissertation in m.dissertation.all %}
+                                {% for thesis in m.thesis.all %}
                                 <li>
-                                    <p>{{dissertation.title}}</p>
+                                    <p style="font-size:0.8rem">{{thesis.title}}</p>
                                 </li>
-                                <li style="text-align: center;list-style: none;">
-                                {% if dissertation.paper_link %}
-                                    <a href="{{dissertation.paper_link}}">[Link]</a>
+                                <li style="text-align: right;list-style: none;">
+                                {% if thesis.paper_link %}
+                                    <a style="font-size:0.7rem;" href="{{thesis.paper_link}}">[Link]</a>
                                 {% endif %}
-                                {% if dissertation.slide_link %}
-                                    <a href="{{dissertation.slide_link}}">[Slide]</a>
+                                {% if thesis.slide_link %}
+                                    <a style="font-size:0.7rem;" href="{{thesis.slide_link}}">[Slide]</a>
                                 {% endif %}
                                 </li>
                                 {% endfor %}
