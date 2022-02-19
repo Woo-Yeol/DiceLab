@@ -68,6 +68,7 @@ a {
 
 ul li {
     text-align: left;
+    line-height: 1.5rem !important;
 }
 
 
@@ -79,6 +80,8 @@ ul li {
     height: 95px;
 }
 
+
+
 h6 {
     padding-top: 1.5%;
     color: #760023;
@@ -86,6 +89,7 @@ h6 {
     display: block;
     text-align: left;
     font-weight: 500;
+    margin-top: 8px;
     margin-bottom: 8px;
     margin-left: 5px;
     font-weight: 700;
