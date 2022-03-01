@@ -32,6 +32,7 @@ def set_data():
         p.label = d['label']
         p.save()
         temp.append(d['title'])
+        
     for d in ai_data:
         a, created = AI_challenge.objects.update_or_create(title=d['title'])
         a.date = d['date']
@@ -43,6 +44,7 @@ def set_data():
         a.link = d['link']
         a.save()
         temp.append(d['title'])
+
     # Data Delete
     for db in Project.objects.all():
         if not db.title in temp:
