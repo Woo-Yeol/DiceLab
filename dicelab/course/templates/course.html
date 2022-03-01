@@ -34,7 +34,7 @@
                             {% for s in course.semester.all%}
                             <ol>
                                 {% if semester == s %}
-                                <li>{{course.code}},{{course.name}}
+                                <li>[{{course.code}}] {{course.name}}
                                 </li>
                                 {% endif %}
                             </ol>
