@@ -32,7 +32,7 @@ def set_data():
         p.label = d['label']
         p.save()
         temp.append(d['title'])
-        
+
     for d in ai_data:
         a, created = AI_challenge.objects.update_or_create(title=d['title'])
         a.date = d['date']
@@ -128,12 +128,18 @@ def load_notionAPI_project():
     filter = {
         "or": [
             {
-                "property": "Project",
-                "text": {
-                            "is_not_empty": True
+                "property": "Status",
+                "select": {
+                            "equals": "Completed",
                 }
             },
-            
+            {
+                "property": "Status",
+                "select": {
+                            "equals": "Doing",
+                }
+            },
+
         ]
     }
     sorts = [
@@ -158,11 +164,11 @@ def load_notionAPI_project():
     for r in source['results']:
         title = r['properties']['Title']['title'][0]['plain_text']
         status = r['properties']['Status']['select']['name']
-        area =  r['properties']['Area']['select']['name'] if r['properties']['Area']['select'] else ''
+        area = r['properties']['Area']['select']['name'] if r['properties']['Area']['select'] else ''
         label = r['properties']['Label']['select']['name'] if r['properties']['Label']['select'] else ''
         assign = ', '.join([l['name'] for l in r['properties']['Assign']
-                            ['people']]) if 'Assign' in r['properties'] else 'None'
-        date = f"{r['properties']['Due']['date']['start']} ~ {r['properties']['Due']['date']['end']}"
+                            ['people']]) if 'Assign' in r['properties'] else ''
+        date = f"{r['properties']['Due']['date']['start']} ~ {r['properties']['Due']['date']['end']}" if r['properties']['Due']['date'] else ''
 
         data.append({
             'title': title,

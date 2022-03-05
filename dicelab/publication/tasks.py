@@ -96,7 +96,7 @@ def load_notionAPI_publication():
         thesis = r['properties']['thesis']['rich_text'][0]['plain_text']
         year = r['properties']['year']['select']['name']
         assign = ', '.join([l['name'] for l in r['properties']['assign']
-                            ['multi_select']]) if 'assign' in r['properties'] else 'None'
+                            ['people']]) if 'assign' in r['properties'] else 'None'
 
         data.append({
             'title': title,

@@ -26,22 +26,29 @@
                 <div class="card_frame">
                     <div class="card_item">
                         <h6>
+                            <span style="color: black;"> #{{ forloop.revcounter}} </span>
                             {% if project.status == 'Doing'  %}
-                            <p>
-                                {{project.title}} - ongoing
-                            </p>
+                               {{project.title}} - ongoing
                             {% else %}
-                            <p>
                                 {{project.title}}
-                            </p>
                             {% endif %}
                         </h6>
                         <div class="clearfix">
                             <div class="text">
                                 <ul>
+                                    {% if project.date and project.label and project.area %}
                                     <li>
-                                        <p>{{project.date}}, {{project.label}}, {{project.area}}</p>
+                                        <p>
+                                            {% if project.date %}
+                                                {{project.date}}, 
+                                            {% endif %}
+                                            {% if project.label %}
+                                            {{project.label}}, 
+                                            {% endif %}
+                                            {{project.area}}
+                                        </p>
                                     </li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
@@ -72,15 +79,12 @@
                     <div class="card_frame">
                         <div class="card_item">
                             <h6>
+                            <span style="color: black;"> #{{ forloop.revcounter}} </span>
                                 {% if ai.link == 'None'%}
-                                <p>
                                     {{ai.title}}
-                                </p>
                                 {% else %}
-                                <p>
                                     {{ai.title}}
                                     <a href={{ ai.link }} target="_blank"> [Link]</a>
-                                </p>
                                 {% endif %}
                             </h6>
                             <div class="clearfix">
