@@ -3,3 +3,14 @@
     font-weight: bold;
     color: black;
 }
+@media (min-width:768px) {
+    .Contents {
+      padding: 0% 5% 3% 5%;
+    }
+  }
+  
+  @media (max-width:768px) {
+    .Contents {
+      padding: 0px 0px;
+    }
+  }
