@@ -20,24 +20,27 @@
     </div>
     <div class="container">
         <div class="Contents">
-            {% for pub in publication %}
-            {% if pub.label == "International Papers" %}
+            {% for y in international_year %}
+            <h5 class="Year"> {{y}} </h5>
+                {% for int in international_paper %}
+                {% for py in int.year.all%}
+                {% if int.label == "International Papers" and py == y %}
             <div class="card_frame">
                 <div class="card_item">
                     <h6>
                         <p>
-                            {{pub.title}}
-                            <a href={{ pub.paper_link }}>[paper]</a>
+                            {{int.title}}
+                            <a href={{ int.paper_link }}>[paper]</a>
                         </p>
                     </h6>
                     <div class="clearfix">
                         <div class="text">
                             <ul>
                                 <li>
-                                    <p>{{pub.assign}}</p>
+                                    <p>{{int.assign}}</p>
                                 </li>
                                 <li>
-                                    <p>{{pub.thesis}}, {{pub.year}}</p>
+                                    <p>{{int.thesis}}, {{int.year}}</p>
                                 </li>
                             </ul>
                         </div>
@@ -45,7 +48,9 @@
                 </div>
             </div>
             {% endif %}
-            {% endfor %}
+            {% endfor %}            
+            {% endfor %}            
+            {% endfor %}            
         </div>
     </div>
 </div>
@@ -57,32 +62,37 @@
     </div>
     <div class="container">
         <div class="Contents">
-            {% for pub in publication %}
-            {% if pub.label == "Domestic Papers" %}
+            {% for y in domestic_year %}
+            <h5 class="Year"> {{y}} </h5>
+                {% for dom in domestic_paper %}
+                    {% for dy in dom.year.all%}
+                {% if dom.label == "Domestic Papers" and dy == y %}
             <div class="card_frame">
                 <div class="card_item">
                     <h6>
                         <p>
-                            {{pub.title}}
-                            <a href={{ pub.paper_link }}>[paper]</a>
+                            {{dom.title}}
+                            <a href={{ dom.paper_link }}>[paper]</a>
                         </p>
                     </h6>
                     <div class="clearfix">
                         <div class="text">
                             <ul>
                                 <li>
-                                    <p>{{pub.assign}}</p>
+                                    <p>{{dom.assign}}</p>
                                 </li>
                                 <li>
-                                    <p>{{pub.thesis}}, {{pub.year}}</p>
+                                    <p>{{dom.thesis}}, {{dom.year}}</p>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            {% endif %}
-            {% endfor %}
+                {% endif %}
+                {% endfor %}            
+                    {% endfor %}            
+            {% endfor %}       
         </div>
     </div>
 
@@ -96,27 +106,38 @@
     </div>
     <div class="container">
         <div class="Contents">
-            {% for patent in patents %}
+
+            {% for y in patent_year %}
+            <h5 class="Year"> {{y}} </h5>
+                {% for pat in patents %}
+                {% for py in pat.year.all%}
+                {% if py == y %}
             <div class="card_frame">
                 <div class="card_item">
                     <h6>
                         <p>
-                            {{patent.title}}
-                            <br>[{{patent.num}}]
+                            {{pat.title}}
+                            <a href={{ pat.paper_link }}>[paper]</a>
                         </p>
                     </h6>
                     <div class="clearfix">
                         <div class="text">
                             <ul>
                                 <li>
-                                    <p>{{patent.assign}}, {{patent.country}}, {{patent.year}}</p>
+                                    <p>{{pat.assign}}</p>
+                                </li>
+                                <li>
+                                    <p>{{pat.thesis}}, {{pat.year}}</p>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            {% endfor %}
+            {% endif %}
+            {% endfor %}            
+            {% endfor %}            
+            {% endfor %}       
         </div>
     </div>
 

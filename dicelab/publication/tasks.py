@@ -4,7 +4,7 @@ import urllib3
 from typing import Dict
 import json
 from json import loads
-from .models import Patents, Publication
+from .models import Patents, International_Paper, Domestic_Paper, Int_Year, Pat_Year, Dom_Year
 
 # 환경 변수 가져오기
 http = urllib3.PoolManager()
@@ -24,15 +24,36 @@ def set_data():
     # Data Create or Update
     temp = []
     for d in pub_data:
-        pub, created = Publication.objects.update_or_create(
-            title=d['title'])
-        pub.label = d['label']
-        pub.paper_link = d['paper_link']
-        pub.assign = d['assign']
-        pub.thesis = d['thesis']
-        pub.year = d['year']
-        pub.save()
-        temp.append(d['title'])
+        if d['label'] == "International Papers":
+            pub, created = International_Paper.objects.update_or_create(
+                title=d['title'])
+            pub.label = d['label']
+            pub.paper_link = d['paper_link']
+            pub.assign = d['assign']
+            pub.thesis = d['thesis']
+            if d['year'] != None:
+                obj, created = Int_Year.objects.get_or_create(
+                    year=d['year'])
+                pub.year.add(obj)
+                pub.save()
+            else:
+                pub.save()
+            temp.append(d['title'])
+        elif d['label'] == "Domestic Papers":
+            pub, created = Domestic_Paper.objects.update_or_create(
+                title=d['title'])
+            pub.label = d['label']
+            pub.paper_link = d['paper_link']
+            pub.assign = d['assign']
+            pub.thesis = d['thesis']
+            if d['year'] != None:
+                obj, created = Dom_Year.objects.get_or_create(
+                    year=d['year'])
+                pub.year.add(obj)
+                pub.save()
+            else:
+                pub.save()
+            temp.append(d['title'])
 
     for d in pat_data:
         pat, created = Patents.objects.update_or_create(
@@ -40,14 +61,20 @@ def set_data():
         pat.country = d['country']
         pat.num = d['num']
         pat.assign = d['assign']
-        pat.year = d['year']
+        if d['year'] != None:
+            obj, created = Pat_Year.objects.get_or_create(year=d['year'])
+            pat.year.add(obj)
+            pat.save()
         pat.save()
         temp.append(d['title'])
 
     # Data Delete
-    for db in Publication.objects.all():
+    for db in International_Paper.objects.all():
         if not db.title in temp:
-            Publication.objects.get(title=db.title).delete()
+            International_Paper.objects.get(title=db.title).delete()
+    for db in Domestic_Paper.objects.all():
+        if not db.title in temp:
+            Domestic_Paper.objects.get(title=db.title).delete()
     for db in Patents.objects.all():
         if not db.title in temp:
             Patents.objects.get(title=db.title).delete()
