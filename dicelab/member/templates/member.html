@@ -244,7 +244,7 @@
                         <li class="thesis">
                             <h6>Thesis Title</h6>
                                 {% for thesis in m.thesis.all %}
-                                    <p style="font-size:0.9rem">{{thesis.title}}</p>
+                                    <p style="font-size:1.1rem; word-break:keep-all;">{{thesis.title}}</p>
                                 <div style="text-align: right">
                                 {% if thesis.paper_link %}
                                     <a style="font-size:0.8rem;" href="{{thesis.paper_link}}">[Link]</a>
