@@ -79,7 +79,7 @@ ul li {
 
 .contact {
     height: 95px;
-    list-style-type: none;
+    list-style-type: none !important;
 }
 
 .text-only ul {
