@@ -126,20 +126,35 @@ def load_notionAPI_project():
         "Content-Type": "application/json"
     }
     filter = {
-        "or": [
+        "and": [
             {
-                "property": "Status",
-                "select": {
-                            "equals": "Completed",
-                }
-            },
-            {
-                "property": "Status",
-                "select": {
+                "or": [
+                    {
+                        "property": "Status",
+                        "select": {
+                                    "equals": "Completed",
+                        }
+                    },
+                    {
+                        "property": "Status",
+                        "select": {
                             "equals": "Doing",
+                        }
+                    },
+                ]
+            },
+            {
+                "property": "Project",
+                "title": {
+                            "is_not_empty": True,
                 }
             },
-
+            {
+                "property": "Due",
+                "date": {
+                    "is_not_empty": True,
+                }
+            }
         ]
     }
     sorts = [
