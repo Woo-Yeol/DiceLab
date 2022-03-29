@@ -12,35 +12,35 @@
         var target = document.getElementById("publication").className += ' active';
     };
 </script>
-<div class="International Papers">
+<div class="Papers">
     <div class="Category">
         <div class="container">
-            <h4>International Papers</h4>
+            <h4>Papers</h4>
         </div>
     </div>
     <div class="container">
         <div class="Contents">
-            {% for y in international_year %}
+            {% for y in paper_year %}
             <h5 class="Year"> {{y}} </h5>
-                {% for int in international_paper %}
-                {% for py in int.year.all%}
-                {% if int.label == "International Papers" and py == y %}
+                {% for p in paper %}
+                {% for py in p.year.all %}
+                {% if py == y %}
             <div class="card_frame">
                 <div class="card_item">
                     <h6>
                         <p>
-                            {{int.title}}
-                            <a href={{ int.paper_link }}>[paper]</a>
+                            {{p.title}}
+                            <a href={{ p.paper_link }}>[paper]</a>
                         </p>
                     </h6>
                     <div class="clearfix">
                         <div class="text">
                             <ul>
                                 <li>
-                                    <p>{{int.assign}}</p>
+                                    <p>{{p.assign}}</p>
                                 </li>
                                 <li>
-                                    <p>{{int.thesis}}, {{int.year}}</p>
+                                    <p>{{p.thesis}}, {{py}}</p>
                                 </li>
                             </ul>
                         </div>
@@ -54,7 +54,7 @@
         </div>
     </div>
 </div>
-<div class="Domestic Papers">
+<!-- <div class="Domestic Papers">
     <div class="Category">
         <div class="container">
             <h4>Domestic Papers</h4>
@@ -95,8 +95,7 @@
             {% endfor %}       
         </div>
     </div>
-
-</div>
+</div> -->
 <br>
 <div class="Patents">
     <div class="Category">
@@ -127,7 +126,7 @@
                                     <p>{{pat.assign}}</p>
                                 </li>
                                 <li>
-                                    <p>{{pat.thesis}}, {{pat.year}}</p>
+                                    <p>{{pat.num}}, {{pat.country}}, {{py}}</p>
                                 </li>
                             </ul>
                         </div>
