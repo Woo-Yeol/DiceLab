@@ -23,7 +23,8 @@ def set_data():
     pat_data = load_notionAPI_patents()['body']
 
     # Data Create or Update
-    temp = []
+    temp_pub = []
+    temp_pat = []
     temp_year = []
     temp_patent_year = []
 
@@ -41,7 +42,7 @@ def set_data():
             paper.save()
         else:
             paper.save()
-        temp.append(d['title'])
+        temp_pub.append(d['title'])
 
     for d in pat_data:
         pat, created = Patents.objects.update_or_create(
@@ -55,7 +56,7 @@ def set_data():
             temp_patent_year.append(d['year'])
             pat.save()
         pat.save()
-        temp.append(d['title'])
+        temp_pat.append(d['title'])
 
     # Data Delete
     for db in Year.objects.all():
@@ -66,10 +67,10 @@ def set_data():
             Pat_Year.objects.get(title=db.year).delete()
 
     for db in Paper.objects.all():
-        if not db.title in temp:
+        if not db.title in temp_pub:
             Paper.objects.get(title=db.title).delete()
     for db in Patents.objects.all():
-        if not db.title in temp:
+        if not db.title in temp_pat:
             Patents.objects.get(title=db.title).delete()
 
 

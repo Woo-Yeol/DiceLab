@@ -22,7 +22,9 @@ Notion = getattr(settings, 'NOTION_VERSION', 'Notion-version')
 def set_data():
     p_data = load_notionAPI_project()['body']
     ai_data = load_notionAPI_ai_challenge()['body']
-    temp = []
+    temp_p = []
+    temp_a = []
+
     for d in p_data:
         p, created = Project.objects.update_or_create(title=d['title'])
         p.date = d['date']
@@ -31,7 +33,7 @@ def set_data():
         p.area = d['area']
         p.label = d['label']
         p.save()
-        temp.append(d['title'])
+        temp_p.append(d['title'])
 
     for d in ai_data:
         a, created = AI_challenge.objects.update_or_create(title=d['title'])
@@ -43,14 +45,14 @@ def set_data():
         a.award = d['award']
         a.link = d['link']
         a.save()
-        temp.append(d['title'])
+        temp_a.append(d['title'])
 
     # Data Delete
     for db in Project.objects.all():
-        if not db.title in temp:
+        if not db.title in temp_p:
             Project.objects.get(title=db.title).delete()
     for db in AI_challenge.objects.all():
-        if not db.title in temp:
+        if not db.title in temp_a:
             AI_challenge.objects.get(title=db.title).delete()
 
 
