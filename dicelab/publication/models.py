@@ -33,28 +33,28 @@ class Pat_Year(models.Model):
 
 
 class Paper(models.Model):
-    title = models.CharField(max_length=50,
+    title = models.CharField(max_length=100,
                              default='', primary_key=True)
     label = models.CharField(
         max_length=20, choices=label, default='International_Paper')
-    paper_link = models.CharField(max_length=30, null=True)
-    thesis = models.CharField(max_length=20, null=True)
+    paper_link = models.CharField(max_length=100, null=True)
+    thesis = models.CharField(max_length=100, null=True)
     year = models.ManyToManyField(
         Year, related_name='paper', blank=True)
-    assign = models.CharField(max_length=20, null=True)
+    assign = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return self.title
 
 
 class Patents(models.Model):
-    title = models.CharField(max_length=50,
+    title = models.CharField(max_length=100,
                              default='', primary_key=True)
-    country = models.CharField(max_length=20, null=True)
-    num = models.CharField(max_length=20, null=True)
+    country = models.CharField(max_length=100, null=True)
+    num = models.CharField(max_length=100, null=True)
     year = models.ManyToManyField(
         Pat_Year, related_name='patents', blank=True)
-    assign = models.CharField(max_length=20, null=True)
+    assign = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return self.title
