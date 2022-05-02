@@ -23,71 +23,71 @@
         {% for g in graduated %}
         {% if g.admission_date|length %}
         {% cycle '<div class="row">' '' %}
-        <div class="card profile">
-            <div class="card-inner">
-                <div class="profile-element">
-                    <div class="profile-img" style="background-image: url({% get_static_prefix %}image/{{g.pic}});">
-                    </div>
-                    <div class="line"></div>
-                    <div class="name">
-                        <h5>{{g.name}}</h5>
-                        <div class="date">
-                            {% if g.admission_date|length %}
-                            <p style="margin-bottom:0px">
-                                {{g.admission_date}}
-                            </p>
-                            <p>
-                                {% if g.course|length %}{{g.course}}{% endif %}
-                            </p>
-                            {% endif %}
+            <div class="card profile">
+                <div class="card-inner">
+                    <div class="profile-element">
+                        <div class="profile-img" style="background-image: url({% get_static_prefix %}image/{{g.pic}});">
+                        </div>
+                        <div class="line"></div>
+                        <div class="name">
+                            <h5>{{g.name}}</h5>
+                            <div class="date">
+                                {% if g.admission_date|length %}
+                                <p style="margin-bottom:0px">
+                                    {{g.admission_date}}
+                                </p>
+                                <p>
+                                    {% if g.course|length %}{{g.course}}{% endif %}
+                                </p>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="text card-body">
-                    <ul>
-                        {% if g.research_interests.all|length < 4 %}
-                        <li class="research_interests">
-                            <h6>Research Interests</h6>
-                            <ul>
-                                {% for r in g.research_interests.all %}
-                                <li>
-                                    <p>{{r}}</p>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                        {% else %}
-                        <li class="research_interests">
-                            <h6>Research Interests</h6>
-                            <ul>
-                                {% for r in g.research_interests %}
-                                <li>
-                                    <p>{{r}}</p>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                        {% endif %}
-                        <li class="contact">
-                            <h6>Contact</h6>
-                            <ul>
-                                <li>
-                                    <p>📫 : {{g.email}}</p>
-                                </li>
-                                {% if g.linked.all|length %}
-                                <li>
-                                    {% for l in g.linked.all %}
-                                    <a href="{{l.link}}">[{{l.title}}]</a>
+                    <div class="text card-body">
+                        <ul>
+                            {% if g.research_interests.all|length < 4 %} <li class="research_interests">
+                                <h6>Research Interests</h6>
+                                <ul>
+                                    {% for r in g.research_interests.all %}
+                                    <li>
+                                        <p>{{r}}</p>
+                                    </li>
                                     {% endfor %}
+                                </ul>
+                                </li>
+                                {% else %}
+                                <li class="research_interests">
+                                    <h6>Research Interests</h6>
+                                    <ul>
+                                        {% for r in g.research_interests %}
+                                        <li>
+                                            <p>{{r}}</p>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
                                 </li>
                                 {% endif %}
-                            </ul>
-                        </li>
-                    </ul>
+                                <li class="contact">
+                                    <h6>Contact</h6>
+                                    <ul>
+                                        <li>
+                                            <p>📫 : {{g.email}}</p>
+                                        </li>
+                                        {% if g.linked.all|length %}
+                                        <li>
+                                            {% for l in g.linked.all %}
+                                            <a href="{{l.link}}">[{{l.title}}]</a>
+                                            {% endfor %}
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-        {% cycle '' '</div>' %}
+            {% cycle '' '
+        </div>' %}
         {% if forloop.last %}
     </div>
     {% endif %}
@@ -106,58 +106,59 @@
         {% for g in graduated %}
         {% if not g.admission_date|length %}
         {% cycle '<div class="row">' '' %}
-        <div class="card profile">
-            <div class="card-inner">
-                <div class="profile-element">
-                    <div style="background-image: url({% get_static_prefix %}image/{{g.pic}});" class="profile-img">
-                    </div>
-                    <div class="line"></div>
-                    <div class="name">
-                        <h5>{{g.name}}</h5>
-                        <div class="date">
-                            {% if g.admission_date|length %}
-                            <p>
-                                {{g.admission_date}}
-                                {% if g.course|length %}{{g.course}}{% endif %}
-                            </p>
-                            {% endif %}
+            <div class="card profile">
+                <div class="card-inner">
+                    <div class="profile-element">
+                        <div style="background-image: url({% get_static_prefix %}image/{{g.pic}});" class="profile-img">
+                        </div>
+                        <div class="line"></div>
+                        <div class="name">
+                            <h5>{{g.name}}</h5>
+                            <div class="date">
+                                {% if g.admission_date|length %}
+                                <p>
+                                    {{g.admission_date}}
+                                    {% if g.course|length %}{{g.course}}{% endif %}
+                                </p>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="text card-body">
-                    <ul>
-                        {% if g.research_interests.all|length %}
-                        <li class="research_interests">
-                            <h6>Research Interests</h6>
-                            <ul>
-                                {% for r in g.research_interests.all %}
-                                <li>
-                                    <p>{{r}}</p>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                        {% endif %}
-                        <li class="contact">
-                            <h6>Contact</h6>
-                            <ul>
-                                <li>
-                                    <p>📫 : {{g.email}}</p>
-                                </li>
-                                {% if g.linked.all|length %}
-                                <li>
-                                    {% for l in g.linked.all %}
-                                    <a href="{{l.link}}">[{{l.title}}]</a>
+                    <div class="text card-body">
+                        <ul>
+                            {% if g.research_interests.all|length %}
+                            <li class="research_interests">
+                                <h6>Research Interests</h6>
+                                <ul>
+                                    {% for r in g.research_interests.all %}
+                                    <li>
+                                        <p>{{r}}</p>
+                                    </li>
                                     {% endfor %}
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </li>
-                    </ul>
+                                </ul>
+                            </li>
+                            {% endif %}
+                            <li class="contact">
+                                <h6>Contact</h6>
+                                <ul>
+                                    <li>
+                                        <p>📫 : {{g.email}}</p>
+                                    </li>
+                                    {% if g.linked.all|length %}
+                                    <li>
+                                        {% for l in g.linked.all %}
+                                        <a href="{{l.link}}">[{{l.title}}]</a>
+                                        {% endfor %}
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-        {% cycle '' '</div>' %}
+            {% cycle '' '
+        </div>' %}
         {% if forloop.last %}
     </div>
     {% endif %}
@@ -221,75 +222,78 @@
         {% for m in master %}
         {% if m.graduate_year|length %}
         {% cycle '<div class="row">' '' %}
-        <div class="card profile">
-            <div class="card-inner">
-                <div class="profile-element">
-                    <div class="profile-img" style="background-image: url({% get_static_prefix %}image/{{m.pic}});">
-                    </div>
-                    <div class="line"></div>
-                    <div class="name">
-                        <h5>{{m.name}}</h5>
-                        <div class="date">
-                            <h6 style="text-align: right;">M.S.</h6>
-                            {% if m.graduate_year|length %}
-                            <p style="margin-bottom:0px">
-                                {{m.graduate_year}}
-                            </p>
-                            {% endif %}
+            <div class="card profile">
+                <div class="card-inner">
+                    <div class="profile-element">
+                        <div class="profile-img" style="background-image: url({% get_static_prefix %}image/{{m.pic}});">
+                        </div>
+                        <div class="line"></div>
+                        <div class="name">
+                            <h5>{{m.name}}</h5>
+                            <div class="date">
+                                <h6 style="text-align: right;">M.S.</h6>
+                                {% if m.graduate_year|length %}
+                                <p style="margin-bottom:0px">
+                                    {{m.graduate_year}}
+                                </p>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="text card-body">
-                    <ul>
-                        <li class="thesis">
-                            {% for thesis in m.thesis.all %}
-                            <div class="thesis_links">
-                                <h6>Thesis Title</h6>
-                                <h6 style="text-align: right;list-style-type: none !important;">
-                                    {% if thesis.paper_link %}
-                                    <a style="font-size:0.8rem;" href="{{thesis.paper_link}}">[Link]</a>
-                                {% endif %}
-                                {% if thesis.slide_link %}
-                                    <a style="font-size:0.8rem;" href="{{thesis.slide_link}}">[Slide]</a>
-                                {% endif %}
-                                </h6>
-                            </div>
-                            <ul>
-                                <li style="font-size:1.1rem; word-break:keep-all; list-style-type: none !important;">{{thesis.title}}</li>
-                            </ul>
-                            {% endfor %}
-                        </li>
-                        {% if m.employment|length %}
-                        <li class = "employment">
-                            <h6>Current Position</h6>
-                            <ul>
-                                <li>
-                                    {{ m.employment }}
-                                </li>
-                            </ul>
-                        </li>
-                        {% else %}
-                        <li class="contact">
-                            <h6>Contact</h6>
-                            <ul>
-                                <li>
-                                    <p>📫 : {{m.email}}</p>
-                                </li>
-                                {% if m.linked.all|length %}
-                                <li>
-                                    {% for l in m.linked.all %}
-                                    <a href="{{l.link}}">[{{l.title}}]</a>
-                                    {% endfor %}
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </li>
-                        {% endif  %}
-                    </ul>
+                    <div class="text card-body">
+                        <ul>
+                            <li class="thesis">
+                                {% for thesis in m.thesis.all %}
+                                <div class="thesis_links" style="display:flex; 
+                            justify-content: space-between;">
+                                    <h6>Thesis Title</h6>
+                                    <h6 style="text-align: right;list-style-type: none !important;">
+                                        {% if thesis.paper_link %}
+                                        <a style="font-size:0.8rem;" href="{{thesis.paper_link}}">[Link]</a>
+                                        {% endif %}
+                                        {% if thesis.slide_link %}
+                                        <a style="font-size:0.8rem;" href="{{thesis.slide_link}}">[Slide]</a>
+                                        {% endif %}
+                                    </h6>
+                                </div>
+                                <ul>
+                                    <li
+                                        style="font-size:1.1rem; word-break:keep-all; list-style-type: none !important;">
+                                        {{thesis.title}}</li>
+                                </ul>
+                                {% endfor %}
+                            </li>
+                            {% if m.employment|length %}
+                            <li class="employment">
+                                <h6>Current Position</h6>
+                                <ul>
+                                    <li>
+                                        {{ m.employment }}
+                                    </li>
+                                </ul>
+                            </li>
+                            {% else %}
+                            <li class="contact">
+                                <h6>Contact</h6>
+                                <ul>
+                                    <li>
+                                        <p>📫 : {{m.email}}</p>
+                                    </li>
+                                    {% if m.linked.all|length %}
+                                    <li>
+                                        {% for l in m.linked.all %}
+                                        <a href="{{l.link}}">[{{l.title}}]</a>
+                                        {% endfor %}
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-        {% cycle '' '</div>' %}
+            {% cycle '' '</div>' %}
         {% if forloop.last %}
     </div>
     {% endif %}
