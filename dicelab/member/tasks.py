@@ -97,6 +97,7 @@ def set_data():
         g.graduate_year = d['graduate_year']
         g.email = d['email']
         g.pic = d['pic']
+        g.employment = d['employment']
         if d['thesis'] != None:
             obj, created = Thesis.objects.update_or_create(
                 title=d['thesis'], paper_link=d['paper_link'], slide_link=d['slide_link'])
@@ -221,6 +222,10 @@ def load_notionAPI_member_master():
             slide_link = r['properties']['slide_link']['url']
         except:
             slide_link = ''
+        try:
+            employment = r['properties']['employment']['rich_text'][0]['plain_text']
+        except:
+            employment = ''
         data.append({
             'name': name,
             'graduate_year': graduate_year,
@@ -229,7 +234,8 @@ def load_notionAPI_member_master():
             'linked': linked,
             'pic': pic,
             'paper_link': paper_link,
-            'slide_link': slide_link
+            'slide_link': slide_link,
+            'employment': employment
         })
     return {
         'statusCode': 200,

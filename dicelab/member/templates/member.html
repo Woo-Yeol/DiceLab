@@ -242,20 +242,33 @@
                 <div class="text card-body">
                     <ul>
                         <li class="thesis">
-                            <h6>Thesis Title</h6>
-                                {% for thesis in m.thesis.all %}
-                                    <p style="font-size:1.1rem; word-break:keep-all;">{{thesis.title}}</p>
-                                <div style="text-align: right">
-                                {% if thesis.paper_link %}
+                            {% for thesis in m.thesis.all %}
+                            <div class="thesis_links">
+                                <h6>Thesis Title</h6>
+                                <h6 style="text-align: right;list-style-type: none !important;">
+                                    {% if thesis.paper_link %}
                                     <a style="font-size:0.8rem;" href="{{thesis.paper_link}}">[Link]</a>
                                 {% endif %}
                                 {% if thesis.slide_link %}
                                     <a style="font-size:0.8rem;" href="{{thesis.slide_link}}">[Slide]</a>
                                 {% endif %}
-                                </div>
-                                {% endfor %}
+                                </h6>
+                            </div>
+                            <ul>
+                                <li style="font-size:1.1rem; word-break:keep-all; list-style-type: none !important;">{{thesis.title}}</li>
+                            </ul>
+                            {% endfor %}
+                        </li>
+                        {% if m.employment|length %}
+                        <li class = "employment">
+                            <h6>Current Position</h6>
+                            <ul>
+                                <li>
+                                    {{ m.employment }}
+                                </li>
                             </ul>
                         </li>
+                        {% else %}
                         <li class="contact">
                             <h6>Contact</h6>
                             <ul>
@@ -271,6 +284,7 @@
                                 {% endif %}
                             </ul>
                         </li>
+                        {% endif  %}
                     </ul>
                 </div>
             </div>

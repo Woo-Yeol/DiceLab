@@ -81,7 +81,10 @@ ul li {
     height: 95px;
     list-style-type: none !important;
 }
-
+.thesis_link{
+    display:flex; 
+    justify-content: space-between;
+}
 .text-only ul {
     padding-left: 2rem;
 }
