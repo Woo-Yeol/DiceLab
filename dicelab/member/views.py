@@ -6,7 +6,7 @@ from .models import *
 
 
 def member(request):
-    set_data()
+    # set_data()
     # 년도 선언
     current_year = datetime.now().year + 1
     year = [current_year-x for x in range(current_year - 2020 + 1)]

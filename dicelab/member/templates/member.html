@@ -86,8 +86,7 @@
                 </div>
             </div>
         </div>
-        {% cycle '' '
-        </div>' %}
+        {% cycle '' '</div>' %}
         {% if forloop.last %}
     </div>
     {% endif %}
@@ -157,8 +156,7 @@
                 </div>
             </div>
         </div>
-        {% cycle '' '
-        </div>' %}
+        {% cycle '' '</div>' %}
         {% if forloop.last %}
     </div>
     {% endif %}
@@ -227,14 +225,24 @@
                 <div class="profile-element">
                     <div class="profile-img" style="background-image: url({% get_static_prefix %}image/{{m.pic}});">
                     </div>
+                    <div class="line"></div>
+                    <div class="name">
+                        <h5>{{m.name}}</h5>
+                        <div class="date">
+                            <h6 style="text-align: right;">M.S.</h6>
+                            {% if m.graduate_year|length %}
+                            <p style="margin-bottom:0px">
+                                {{m.graduate_year}}
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-            </div>
             <div class="text card-body">
                 <ul>
                     <li class="thesis">
                         {% for thesis in m.thesis.all %}
-                        <div class="thesis_links" style="display:flex; 
-                            justify-content: space-between;">
+                        <div class="thesis_links" style="display:flex; justify-content: space-between;">
                                 <h6>Thesis Title</h6>
                                 <h6 style="text-align: right;list-style-type: none !important;">
                                     {% if thesis.paper_link %}
@@ -252,7 +260,7 @@
                             {% endfor %}
                         </li>
                         {% if m.employment|length %}
-                        <li class="employment">
+                        <li class = "employment">
                             <h6>Current Position</h6>
                             <ul>
                                 <li>
@@ -260,16 +268,23 @@
                                 </li>
                             </ul>
                         </li>
-                        {% if m.linked.all|length %}
-                        <li>
-                            {% for l in m.linked.all %}
-                            <a href="{{l.link}}">[{{l.title}}]</a>
-                            {% endfor %}
+                        {% else %}
+                        <li class="contact">
+                            <h6>Contact</h6>
+                            <ul>
+                                <li>
+                                    <p>📫 : {{m.email}}</p>
+                                </li>
+                                {% if m.linked.all|length %}
+                                <li>
+                                    {% for l in m.linked.all %}
+                                    <a href="{{l.link}}">[{{l.title}}]</a>
+                                    {% endfor %}
+                                </li>
+                                {% endif %}
+                            </ul>
                         </li>
-                        {% endif %}
-                    </ul>
-                </li>
-                {% endif %}
+                        {% endif  %}
             </ul>
         </div>
     </div>
