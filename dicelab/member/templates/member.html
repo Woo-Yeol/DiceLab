@@ -249,19 +249,20 @@
                                 <h6 style="text-align: right;list-style-type: none !important;">
                                     {% if thesis.paper_link %}
                                     <a style="font-size:0.8rem;" href="{{thesis.paper_link}}">[Link]</a>
-                                {% endif %}
-                                {% if thesis.slide_link %}
+                                    {% endif %}
+                                    {% if thesis.slide_link %}
                                     <a style="font-size:0.8rem;" href="{{thesis.slide_link}}">[Slide]</a>
-                                {% endif %}
+                                    {% endif %}
                                 </h6>
                             </div>
                             <ul>
-                                <li style="font-size:1.1rem; word-break:keep-all; list-style-type: none !important;">{{thesis.title}}</li>
+                                <li style="font-size:1.1rem; word-break:keep-all; list-style-type: none !important;">
+                                    {{thesis.title}}</li>
                             </ul>
                             {% endfor %}
                         </li>
                         {% if m.employment|length %}
-                        <li class = "employment">
+                        <li class="employment">
                             <h6>Current Position</h6>
                             <ul>
                                 <li>
