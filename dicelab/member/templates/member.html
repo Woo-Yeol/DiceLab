@@ -243,7 +243,8 @@
                     <ul>
                         <li class="thesis">
                             {% for thesis in m.thesis.all %}
-                            <div class="thesis_links">
+                            <div class="thesis_links" style="display:flex; 
+                            justify-content: space-between;">
                                 <h6>Thesis Title</h6>
                                 <h6 style="text-align: right;list-style-type: none !important;">
                                     {% if thesis.paper_link %}
