@@ -36,7 +36,7 @@
                         <div class="clearfix">
                             <div class="text">
                                 <ul>
-                                    {% if project.date and project.label and project.area %}
+                                    {% if project.date or project.label or project.area %}
                                     <li>
                                         <p>
                                             {% if project.date %}
@@ -45,7 +45,9 @@
                                             {% if project.label %}
                                             {{project.label}}, 
                                             {% endif %}
+                                            {% if project.area %}
                                             {{project.area}}
+                                            {% endif %}
                                         </p>
                                     </li>
                                     {% endif %}
