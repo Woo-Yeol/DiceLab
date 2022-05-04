@@ -177,6 +177,7 @@
                                 <li>
                                     4th grade :
                                     <ul>
+                                        {% if project_4th.all|length %}
                                         {% for p in project_4th%}
                                         <li>
                                             {% for a in p.alumni.all %}
@@ -185,11 +186,17 @@
                                             - {{p.title}}
                                         </li>
                                         {% endfor %}
+                                        {% else %}
+                                        <li>
+                                            Waiting...
+                                        </li>
+                                        {% endif %}
                                     </ul>
                                 </li>
                                 <li>
                                     3th grade :
                                     <ul>
+                                        {% if project_3th.all|length %}
                                         {% for p in project_3th%}
                                         <li>
                                             {% for a in p.alumni.all %}
@@ -198,6 +205,11 @@
                                             - {{p.title}}
                                         </li>
                                         {% endfor %}
+                                        {% else %}
+                                        <li>
+                                            Waiting...
+                                        </li>
+                                        {% endif %}
                                     </ul>
                                 </li>
                             </ul>

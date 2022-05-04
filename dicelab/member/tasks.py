@@ -78,11 +78,13 @@ def set_data():
             a.course = d['course']
         else:
             a.course = ''
+        a.team.clear()
         obj, created = Team.objects.get_or_create(title=d['team'])
         a.team.add(obj)
         team_temp.append(obj.title)
         a.save()
         if d['project'] != None:
+            a.project.clear()
             obj, created = Project.objects.get_or_create(
                 title=d['project'], year=d['graduate_year'])
             a.project.add(obj)
