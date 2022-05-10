@@ -26,8 +26,9 @@ def set_data():
     temp = []
     for d in data:
         school, created = School.objects.update_or_create(title=d['title'])
+        school.lecture.clear()
         for l, u in d['lecture']:
-            lecture, created = Lecture.objects.update_or_create(
+            lecture, created = Lecture.objects.get_or_create(
                 name=l)
             lecture.url = u
             lecture.save()
