@@ -72,8 +72,8 @@ def load_notionAPI_school():
     data = []
     for r in source['results']:
         title = r['properties']['Title']['title'][0]['plain_text']
-        lecture = [l['title'][0]['plain_text']
-                   for l in r['properties']['lecture']['rollup']['array']]
+        lecture = [l['plain_text']
+                   for l in r['properties']['lecture']['rollup']['array'][0]['title']]
         url = [l['url']
                for l in r['properties']['url']['rollup']['array']]
         lecture = zip(lecture, url)
