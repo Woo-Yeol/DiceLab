@@ -26,8 +26,7 @@ def set_data():
     temp = []
     for d in data:
         s, created = Seminar.objects.update_or_create(
-            title=d['title'])
-        s.date = d['date']
+            title=d['title'], date=d['date'])
         s.speaker = d['speaker']
         s.source = d['source']
         s.slide = d['slide']
@@ -35,22 +34,21 @@ def set_data():
         s.area = d['area']
         s.paper = d['paper']
         s.save()
-        temp.append(d['title'])
+        temp.append(s.id)
     # Data Delete
     for db in Seminar.objects.all():
-        if not db.title in temp:
-            Seminar.objects.get(title=db.title).delete()
+        if not db.id in temp:
+            db.delete()
 
 
 @shared_task
 def load_recent_data_seminar():
-    p_data = Seminar.objects.all()
+    p_data = Seminar.objects.all()[:10]
     data = load_notionAPI_seminar()['body']
     temp = []
     for d in data:
         s, created = Seminar.objects.update_or_create(
-            title=d['title'])
-        s.date = d['date']
+            title=d['title'], date=d['date'])
         s.speaker = d['speaker']
         s.source = d['source']
         s.slide = d['slide']
@@ -60,7 +58,7 @@ def load_recent_data_seminar():
         s.save()
         temp.append(s)
     # Data Delete
-    for t, p in map(temp, p_data[:10]):
+    for t, p in map(temp, p_data):
         if t != p:
             set_data()
 
@@ -80,7 +78,7 @@ def load_notionAPI_seminar():
                     "select": {
                         "equals": "To Review"
                     }
-            }
+                }
         ]
     }
     sorts = [  # 정렬
@@ -170,7 +168,7 @@ def load_recent_data_seminar():
                     "select": {
                         "equals": "To Review"
                     }
-            }
+                }
         ]
     }
     sorts = [  # 정렬
