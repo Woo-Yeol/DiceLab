@@ -3,6 +3,7 @@ from course import tasks as ct
 from demo import tasks as dt
 from member import tasks as mt
 from news import tasks as nt
+from project import tasks as prjt
 from professor import tasks as prt
 from publication import tasks as put
 from school import tasks as sct
@@ -22,6 +23,7 @@ def set_all_data():
     dt.set_data()
     mt.set_data()
     nt.set_data()
+    prjt.set_data()
     prt.set_data()
     put.set_data()
     sct.set_data()
