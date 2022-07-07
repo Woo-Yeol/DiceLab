@@ -9,13 +9,46 @@
         for(var i=0; i< matches.length;i++){
             matches[i].classList.remove('active');
         }
-        var target = document.getElementById("school").className += ' active';
+        var target = document.getElementById("photo").className += ' active';
     };
 </script>
 <div>
     <div class="Category">
         <div class="container">
-            <h4>Seasonal Schools</h4>
+            <h4>Photos</h4>
+        </div>
+    </div>
+    <div class="container">
+        <div class="Contents">
+            {% for a in activity %}
+            {% cycle '<div class="row">' '' %}
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="card_frame">
+                    <div class="card_item">
+                        <div>
+                            <img src="{% get_static_prefix %}image/{{a.title}}.jpg" alt="loading" width="100%"
+                                class="school_image">
+                        </div>
+                        <h6>
+                            <p>
+                                {{a.date|date:"Y년 m월"}} | {{a.title}}
+                            </p>
+                        </h6>
+                    </div>
+                </div>
+            </div>
+            {% cycle '' '</div>' %}
+            {% if forloop.last %}
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+<!-- 
+<div>
+    <div class="Category">
+        <div class="container">
+            <h4>Seasonal School</h4>
         </div>
     </div>
     <div class="container">
@@ -54,8 +87,7 @@
             {% endif %}
         {% endfor %}
     </div>
-</div>
-
+</div> -->
 
 </div>
 

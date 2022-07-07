@@ -4,11 +4,14 @@ from typing import Dict
 from json import loads
 from django.conf import settings
 from celery import shared_task
-from .models import School, Lecture
+from .models import School, Lecture, Activity
+from datetime import date
 
 http = urllib3.PoolManager()
 School_Database_ID = getattr(
     settings, 'SCHOOL_DATABASE_ID', 'School_Database_ID')
+Photo_Database_ID = getattr(
+    settings, 'PHOTO_DATABASE_ID', 'Photo_Database_ID')
 Internal_Integration_Token = getattr(
     settings, 'INTERNAL_INTEGRATION_TOKEN', 'Internal_Integration_Token')
 Notion = getattr(settings, 'NOTION_VERSION', 'Notion-version')
@@ -22,8 +25,12 @@ headers = {
 @shared_task
 def set_data():
     data = load_notionAPI_school()['body']
+    activity = load_notionAPI_activity()['body']
     # Data Create or Update
-    temp = []
+    temp_data = []
+    temp_activity = []
+
+    # School
     for d in data:
         school, created = School.objects.update_or_create(title=d['title'])
         school.lecture.clear()
@@ -34,23 +41,78 @@ def set_data():
             lecture.save()
             school.lecture.add(lecture)
             school.save()
-        temp.append(d['title'])
+        temp_data.append(d['title'])
+
+    # Activity
+    for a in activity:
+        act, created = Activity.objects.update_or_create(
+            title=a['title'])
+        act.date = date(a['date'][0], a['date'][1], a['date'][2])
+        act.save()
+        temp_activity.append(a['title'])
+
     # Data Delete
     for db in School.objects.all():
-        if not db.title in temp:
+        if not db.title in temp_data:
             School.objects.get(title=db.title).delete()
+    for db in Activity.objects.all():
+        if not db.title in temp_activity:
+            Activity.objects.get(title=db.title).delete()
+
+
+def load_notionAPI_activity():
+    url = f"https://api.notion.com/v1/databases/{Photo_Database_ID}/query"
+    filter = {  # 가져올 데이터 필터
+        "or": [
+            {
+                "property": "title",
+                "text": {
+                    "is_not_empty": True
+                }
+            }
+        ]
+    }
+    sorts = [  # 정렬
+        {
+            "property": "title",
+            "direction": "descending"
+        }
+    ]
+    body = {
+        "filter": filter,
+        "sorts": sorts
+    }
+    response = http.request('POST',
+                            url,
+                            body=json.dumps(body),  # json파일로 인코딩
+                            headers=headers,
+                            retries=False)
+    source: Dict = loads(response.data.decode('utf-8'))  # 자료형 명시
+    data = []
+    for r in source['results']:
+        title = r['properties']['Title']['title'][0]['plain_text']
+        date = list(map(int, r['properties']['Date']
+                    ['date']['start'].split('-')))
+        data.append({
+            'title': title,
+            'date': date,
+        })
+    return {
+        'statusCode': 200,
+        'body': data
+    }
 
 
 def load_notionAPI_school():
     url = f"https://api.notion.com/v1/databases/{School_Database_ID}/query"
     filter = {  # 가져올 데이터 필터
         "or": [
-                {
-                    "property": "title",
-                    "text": {
-                        "is_not_empty": True
-                    }
+            {
+                "property": "title",
+                "text": {
+                    "is_not_empty": True
                 }
+            }
         ]
     }
     sorts = [  # 정렬

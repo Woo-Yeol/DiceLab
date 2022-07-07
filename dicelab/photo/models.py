@@ -15,3 +15,15 @@ class School(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Activity(models.Model):
+    title = models.CharField(primary_key=True, max_length=100,)
+    description = models.CharField(max_length=200, null=True, blank=True)
+    date = models.DateField(blank=True, null=True)
+
+    class Meta:
+        unique_together = (('title', 'date'))
+
+    def __str__(self):
+        return self.title
