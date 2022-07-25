@@ -26,7 +26,12 @@ headers = {
 def set_data():
     data = load_notionAPI_course()['body']
     temp = []
+    semester_temp = []
     # Data Create or Update
+    
+    for c in Course.objects.all():
+        c.semester.clear()
+
     for d in data:
         c, created = Course.objects.update_or_create(
             name=d['name'])
@@ -36,12 +41,17 @@ def set_data():
             obj, created = Semester.objects.get_or_create(
                 year=s[0:4], title=s[5:])
             c.semester.add(obj)
+            semester_temp.append(s[5:])
             c.save()
         temp.append(d['code'])
     # Data Delete
     for db in Course.objects.all():
         if not db.code in temp:
             Course.objects.get(code=db.code).delete()
+    for db in Semester.objects.all():
+        if not db.title in semester_temp:
+            Semester.objects.get(title=db.title).delete()
+
 
 
 def load_notionAPI_course():
@@ -86,6 +96,7 @@ def load_notionAPI_course():
                 'semester': semester
             }
         )
+
     return {
         'statusCode': 200,
         'body': data
