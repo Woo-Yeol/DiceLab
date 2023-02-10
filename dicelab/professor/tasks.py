@@ -1,11 +1,13 @@
-from email.mime import image
-from celery import shared_task
-from django.conf import settings
-import urllib3
-from typing import Dict
+"""
+Modules for Data Query & DB Indexing
+"""
 from json import loads
-from .models import Professor_Page_Code
-import json
+from typing import Dict
+from celery import shared_task
+import urllib3
+from django.conf import settings
+from .models import Professor
+
 
 http = urllib3.PoolManager()
 Page_ID = getattr(
@@ -23,14 +25,20 @@ headers = {
 
 @shared_task
 def set_data():
-    for db in Professor_Page_Code.objects.all():
+    """
+    DB Indexing
+    """
+    for db in Professor.objects.all():
         db.delete()
     data = load_notionAPI_professor()
-    target = Professor_Page_Code.objects.get_or_create(
+    target = Professor.objects.get_or_create(
         body=data['body'], image=data['image'])
 
 
 def load_notionAPI_professor():
+    """
+    Data Query
+    """
     url = f"https://api.notion.com/v1/blocks/{Page_ID}/children?page_size=100"
     response = http.request('GET',
                             url,  # json파일로 인코딩

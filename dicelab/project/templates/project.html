@@ -13,35 +13,54 @@
     };
 </script>
 <div class="Project">
-    <div class="Category">
+    <div
+    class="Category"
+    style="
+      background: url('{% static 'image/banner.jpg' %}');
+      background-size: cover;
+      background-position: center center;
+    "
+  >
         <div class="container">
-            <h4>Projects</h4>
+            <h3>PROJECTS</h3>
         </div>
     </div>
     <div class="container">
         <div class="Contents">
+            <div class="label">
+                <h4>Papers</h4>
+            </div>
             {% for project in projects %}
             {% cycle '<div class="row">' '' %}
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="card_frame">
                     <div class="card_item">
                         <h6>
+                            <span style="color: black;"> #{{ forloop.revcounter}} </span>
                             {% if project.status == 'Doing'  %}
-                            <p>
-                                {{project.title}} - ongoing
-                            </p>
+                               {{project.title}} - ongoing
                             {% else %}
-                            <p>
                                 {{project.title}}
-                            </p>
                             {% endif %}
                         </h6>
                         <div class="clearfix">
                             <div class="text">
                                 <ul>
+                                    {% if project.date or project.label or project.area %}
                                     <li>
-                                        <p>{{project.date}}, {{project.label}}, {{project.area}}</p>
+                                        <p>
+                                            {% if project.date %}
+                                                {{project.date}}, 
+                                            {% endif %}
+                                            {% if project.label %}
+                                            {{project.label}}, 
+                                            {% endif %}
+                                            {% if project.area %}
+                                            {{project.area}}
+                                            {% endif %}
+                                        </p>
                                     </li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
@@ -58,13 +77,11 @@
 
 </div>
 <div class="AI Challenge">
-    <div class="Category ">
-        <div>
-            <h4>AI Challenge</h4>
-        </div>
-    </div>
     <div class="container">
         <div class="Contents">
+            <div class="label">
+                <h4>AI Challenge</h4>
+            </div>
             {% for ai in ai_challenges %}
             {% if ai.status != 'To Do' %}
             {% cycle '<div class="row">' '' %}
@@ -72,15 +89,12 @@
                     <div class="card_frame">
                         <div class="card_item">
                             <h6>
+                            <span style="color: black;"> #{{ forloop.revcounter}} </span>
                                 {% if ai.link == 'None'%}
-                                <p>
                                     {{ai.title}}
-                                </p>
                                 {% else %}
-                                <p>
                                     {{ai.title}}
                                     <a href={{ ai.link }} target="_blank"> [Link]</a>
-                                </p>
                                 {% endif %}
                             </h6>
                             <div class="clearfix">

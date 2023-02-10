@@ -1,3 +1,4 @@
+""" Import Django Admin Functions """
 from django.contrib import admin
 from .models import Course, Semester
 

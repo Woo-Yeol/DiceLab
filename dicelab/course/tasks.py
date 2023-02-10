@@ -1,9 +1,10 @@
+""" Import Preprocessing for DB Functions """
+import json
+from json import loads
+from typing import Dict
+import urllib3
 from celery import shared_task
 from django.conf import settings
-import json
-import urllib3
-from typing import Dict
-from json import loads
 from .models import Semester, Course
 
 
@@ -24,9 +25,17 @@ headers = {
 
 @shared_task
 def set_data():
-    data = load_notionAPI_course()['body']
+    """
+    주기적으로 실행될 Data Update 함수
+    """
+    data = load_notion_api_course()['body']
     temp = []
+    semester_temp = []
+
     # Data Create or Update
+    for c in Course.objects.all():
+        c.semester.clear()
+
     for d in data:
         c, created = Course.objects.update_or_create(
             name=d['name'])
@@ -36,15 +45,23 @@ def set_data():
             obj, created = Semester.objects.get_or_create(
                 year=s[0:4], title=s[5:])
             c.semester.add(obj)
+            semester_temp.append(s[5:])
             c.save()
         temp.append(d['code'])
     # Data Delete
     for db in Course.objects.all():
         if not db.code in temp:
             Course.objects.get(code=db.code).delete()
+    for db in Semester.objects.all():
+        if not db.title in semester_temp:
+            Semester.objects.get(title=db.title).delete()
 
 
-def load_notionAPI_course():
+
+def load_notion_api_course():
+    """
+    Course Page에 대한 Notion API 요청 함수
+    """
     url = f"https://api.notion.com/v1/databases/{Course_Database_ID}/query"
     sorts = [  # 정렬
         {
@@ -74,11 +91,11 @@ def load_notionAPI_course():
 
     source: Dict = loads(response.data.decode('utf-8'))  # 자료형 명시
     data = []
-    for r in source['results']:
-        code = r['properties']['code']['title'][0]['plain_text'] if r['properties']['code']['title'] else ""
-        name = r['properties']['name']['rich_text'][0]['plain_text']
+    for result in source['results']:
+        code = result['properties']['code']['title'][0]['plain_text'] if result['properties']['code']['title'] else ""
+        name = result['properties']['name']['rich_text'][0]['plain_text']
         semester = ([l['name']
-                    for l in r['properties']['semester']['multi_select']]) if 'semester' in r['properties'] else 'None'
+                    for l in result['properties']['semester']['multi_select']]) if 'semester' in result['properties'] else 'None'
         data.append(
             {
                 'code': code,
@@ -86,6 +103,7 @@ def load_notionAPI_course():
                 'semester': semester
             }
         )
+
     return {
         'statusCode': 200,
         'body': data

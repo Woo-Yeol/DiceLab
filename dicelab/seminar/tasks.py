@@ -1,11 +1,14 @@
+"""
+Modules for Data Query & DB Indexing
+"""
 import json
-import urllib3
-from typing import Dict
 from json import loads
+import re
+from typing import Dict
+import urllib3
 from django.conf import settings
 from celery import shared_task
 from .models import Seminar
-import re
 
 http = urllib3.PoolManager()
 Seminar_Database_ID = getattr(
@@ -22,12 +25,14 @@ headers = {
 
 @shared_task
 def set_data():
+    """
+    DB Indexing
+    """
     data = load_notionAPI_seminar()['body']
     temp = []
-    for d in data:
+    for d in data:            
         s, created = Seminar.objects.update_or_create(
-            title=d['title'])
-        s.date = d['date']
+            title=d['title'], date=d['date'])
         s.speaker = d['speaker']
         s.source = d['source']
         s.slide = d['slide']
@@ -35,22 +40,24 @@ def set_data():
         s.area = d['area']
         s.paper = d['paper']
         s.save()
-        temp.append(d['title'])
+        temp.append(s.id)
     # Data Delete
     for db in Seminar.objects.all():
-        if not db.title in temp:
-            Seminar.objects.get(title=db.title).delete()
+        if not db.id in temp:
+            db.delete()
 
 
 @shared_task
 def load_recent_data_seminar():
-    p_data = Seminar.objects.all()
+    """
+    DB Indexing
+    """
+    p_data = Seminar.objects.all()[:10]
     data = load_notionAPI_seminar()['body']
     temp = []
     for d in data:
         s, created = Seminar.objects.update_or_create(
-            title=d['title'])
-        s.date = d['date']
+            title=d['title'], date=d['date'])
         s.speaker = d['speaker']
         s.source = d['source']
         s.slide = d['slide']
@@ -60,12 +67,15 @@ def load_recent_data_seminar():
         s.save()
         temp.append(s)
     # Data Delete
-    for t, p in map(temp, p_data[:10]):
+    for t, p in map(temp, p_data):
         if t != p:
             set_data()
 
 
 def load_notionAPI_seminar():
+    """
+    Data Query
+    """
     url = f"https://api.notion.com/v1/databases/{Seminar_Database_ID}/query"
     filter = {  # 가져올 데이터 필터
         "or": [
@@ -80,7 +90,7 @@ def load_notionAPI_seminar():
                     "select": {
                         "equals": "To Review"
                     }
-            }
+                }
         ]
     }
     sorts = [  # 정렬
@@ -117,6 +127,7 @@ def load_notionAPI_seminar():
         next_cursor = source_append['next_cursor']
         source['results'] += source_append['results']
     data = []
+
     for r in source['results']:
         title = '-'
         source = '-'
@@ -156,6 +167,9 @@ def load_notionAPI_seminar():
 
 
 def load_recent_data_seminar():
+    """
+    Data Query
+    """
     url = f"https://api.notion.com/v1/databases/{Seminar_Database_ID}/query"
     filter = {  # 가져올 데이터 필터
         "or": [
@@ -170,7 +184,7 @@ def load_recent_data_seminar():
                     "select": {
                         "equals": "To Review"
                     }
-            }
+                }
         ]
     }
     sorts = [  # 정렬
@@ -192,6 +206,7 @@ def load_recent_data_seminar():
                             retries=False)
     source: Dict = loads(response.data.decode('utf-8'))  # 자료형 명시
     data = []
+    
     for r in source['results']:
         title = '-'
         source = '-'
@@ -208,6 +223,7 @@ def load_recent_data_seminar():
             else:
                 title = rawtitle
                 # paper = ''
+
         data.append({
             'date': r['properties']['Date']['date']['start'][2:] if 'Date' in r['properties'] else '19-01-01',
             'speaker': r['properties']['Assign']['people'][0]['name'] if 'Assign' in r['properties'] and r['properties']['Assign']['people'] else '-',

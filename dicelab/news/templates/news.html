@@ -1,69 +1,76 @@
-{% extends 'index.html' %}
-{% load static %}
-{% block content %}
-<link rel="stylesheet" type='text/css' href="{% static 'css/card.css' %}">
-<link rel="stylesheet" type='text/css' href="{% static 'css/news.css' %}">
+{% extends 'index.html' %} {% load static %} {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/card.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/news.css' %}" />
 <script type="text/javascript">
-    window.onload = function(){
-        var matches = document.getElementsByClassName("nav-link");
-        for(var i=0; i< matches.length;i++){
-            matches[i].classList.remove('active');
-        }
-        var target = document.getElementById("news").className += ' active';
-    };
+  window.onload = function () {
+    var matches = document.getElementsByClassName("nav-link");
+    for (var i = 0; i < matches.length; i++) {
+      matches[i].classList.remove("active");
+    }
+    var target = (document.getElementById("news").className += " active");
+  };
 </script>
 <div class="News">
-    <div class="Category">
-        <div class="container">
-            <h4>News</h4>
-        </div>
-    </div>
+  <div
+    class="Category"
+    style="
+      background: url('{% static 'image/banner.jpg' %}');
+      background-size: cover;
+      background-position: center center;
+    "
+  >
     <div class="container">
-        <div class="Contents">
-            {% for n in news %}
-            <div class="card_frame">
-                <div class="card_item">
-                    {% if n.pic|length %}
-                    <div class="item">
-                    {% else %}
-                    <div class="item_only">
-                        {% endif %}
-                        <div class="type-badge">{{n.date}}</div>
-                        <h6>{{n.title}}</h6>
-                        <div class="clearfix">
-                            {% if n.pic|length %}
-                            <div class="text">
-                                {% else %}
-                                <div class="text_whole">
-                                    {% endif %}
-                                    <ul>
-                                        {% for content in n.content %}
-                                        <li>
-                                            {{content.block}}
-                                            {% if content.child|length %}
-                                            <ul>
-                                                {% for c in content.child %}
-                                                <li style=list-style-type:none;>> {{c.block}}</li>
-                                                {% endfor %}
-                                            </ul>
-                                            {% endif %}
-                                        </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        {% if n.pic|length %}
-                        <div class="news_img">
-                            <img src="{% get_static_prefix %}image/{{n.pic}}" alt="loading">
-                        </div>
-                        {% endif %}
-                    </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+      <h3>NEWS</h3>
     </div>
+  </div>
+  <div class="container">
+    <div class="Contents">
+      {% for n in news %}
+      <div class="card_frame" id="{{n.date}}">
+        <div class="card_item">
+          {% if n.pic|length %}
+          <div class="item">
+            {% else %}
+            <div class="item_only">
+              {% endif %}
+              <div class="type-badge">{{n.date}}</div>
+              <h6>{{n.title}}</h6>
+              <div class="clearfix">
+                {% if n.pic|length %}
+                <div class="text">
+                  {% else %}
+                  <div class="text_whole">
+                    {% endif %}
+                    <ul>
+                      {% for content in n.content %}
+                      <li>
+                        {{content.block}} {% if content.child|length %}
+                        <ul>
+                          {% for c in content.child %}
+                          <li style="list-style-type: none">> {{c.block}}</li>
+                          {% endfor %}
+                        </ul>
+                        {% endif %}
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              {% if n.pic|length %}
+              <div class="news_img">
+                <img
+                  src="{% get_static_prefix %}image/{{n.pic}}"
+                  alt="loading"
+                />
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

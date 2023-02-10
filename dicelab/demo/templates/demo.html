@@ -13,9 +13,16 @@
     };
 </script>
 <div class="Demo">
-    <div class="Category">
+    <div
+    class="Category"
+    style="
+      background: url('{% static 'image/banner.jpg' %}');
+      background-size: cover;
+      background-position: center center;
+    "
+  >
         <div class="container">
-            <h4>Demo</h4>
+            <h3>DEMO</h3>
         </div>
     </div>
     <div class="container">
@@ -25,14 +32,20 @@
                 <div class="card_item">
                     <div class="type-badge">{{d.date}}</div>
                     <h6>{{d.title}}</h6>
+                    
+                    {% if d.description %}
                     <div class="clearfix">
                         <div class="text">
                             {{d.description}}
                         </div>
                     </div>
+                    {% endif %}
+
+                    {% if d.video %}
                     <div class="demo_video">
                         <video controls src="{% get_static_prefix %}video/{{d.video}}" alt="loading">
                     </div>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}

@@ -1,21 +1,22 @@
+"""
+Modules for Data Query & DB Indexing
+"""
 import json
-import urllib3
 from typing import Dict
 from json import loads
+import urllib3
 from django.conf import settings
 from celery import shared_task
 from .models import Demo
 
 http = urllib3.PoolManager()
-# Demo_Database_ID = getattr(
-#     settings, 'DEMO_DATABASE_ID', 'Demo_Database_ID')
-Demo_Database_ID = "619cc519d8594cbdb36eac60ad851be6"
-# Internal_Integration_Token = getattr(
-#     settings, 'INTERNAL_INTEGRATION_TOKEN', 'Internal_Integration_Token')
-Internal_Integration_Token = 'secret_36kmAz4GSNiTRbvKcfgSAKGkkawUSZSgMuPLpjhRDNx'
+DEMO_DATABASE_ID = getattr(
+    settings, 'DEMO_DATABASE_ID', 'DEMO_DATABASE_ID')
+INTERNAL_INTEGRATION_TOKEN = getattr(
+    settings, 'INTERNAL_INTEGRATION_TOKEN', 'INTERNAL_INTEGRATION_TOKEN')
 Notion = getattr(settings, 'NOTION_VERSION', 'Notion-version')
 headers = {
-    'Authorization': f'Bearer {Internal_Integration_Token}',
+    'Authorization': f'Bearer {INTERNAL_INTEGRATION_TOKEN}',
     'Notion-Version': Notion,
     "Content-Type": "application/json"
 }
@@ -23,7 +24,10 @@ headers = {
 
 @shared_task
 def set_data():
-    data = load_notionAPI_demo()['body']
+    """
+    DB Indexing
+    """
+    data = load_notion_api_demo()['body']
     temp = []
     for d in data:
         c, created = Demo.objects.update_or_create(
@@ -39,6 +43,9 @@ def set_data():
 
 
 def get_block(id):
+    """
+    Data Query
+    """
     url = f"https://api.notion.com/v1/blocks/{id}/children?page_size=100"
     response = http.request('GET',
                             url,  # json파일로 인코딩
@@ -63,8 +70,11 @@ def print_block(data):
             print_block(d['child'])
 
 
-def load_notionAPI_demo():
-    url = f"https://api.notion.com/v1/databases/{Demo_Database_ID}/query"
+def load_notion_api_demo():
+    """
+    Data Query
+    """
+    url = f"https://api.notion.com/v1/databases/{DEMO_DATABASE_ID}/query"
     filter = {  # 가져올 데이터 필터
         "or": [
                 {
@@ -91,22 +101,24 @@ def load_notionAPI_demo():
                             headers=headers,
                             retries=False)
     source: Dict = loads(response.data.decode('utf-8'))  # 자료형 명시
-
     data = []
     for r in source['results']:
         title = r['properties']['title']['title'][0]['plain_text']
         try:
             page_id = r['id']
             description = get_block(page_id)
-        except:
+        except KeyError:
             description = ''
         try:
-            video = r['properties']['video']['files'][0]['name']
-        except:
+            if r['properties']['video']['files']:
+                video = r['properties']['video']['files'][0]['name']
+            else:
+                video=''
+        except KeyError:
             video = ''
         try:
             date = r['properties']['date']['date']['start'].replace('/', '.')
-        except:
+        except KeyError:
             date = ''
         data.append({
             'title': title,

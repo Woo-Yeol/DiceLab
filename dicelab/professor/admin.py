@@ -1,4 +1,7 @@
+"""
+Modules for Admin Page
+"""
 from django.contrib import admin
-from .models import Professor_Page_Code
+from .models import Professor
 # Register your models here.
-admin.site.register(Professor_Page_Code)
+admin.site.register(Professor)

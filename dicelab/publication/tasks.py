@@ -1,10 +1,13 @@
+"""
+Modules for Data Query & DB Indexing
+"""
+import json
+from json import loads
+from typing import Dict
 from celery import shared_task
 from django.conf import settings
 import urllib3
-from typing import Dict
-import json
-from json import loads
-from .models import Patents, Publication
+from .models import Patents, PatentYear, Paper, Year
 
 # 환경 변수 가져오기
 http = urllib3.PoolManager()
@@ -19,20 +22,33 @@ Notion = getattr(settings, 'NOTION_VERSION', 'Notion-version')
 
 @shared_task
 def set_data():
-    pub_data = load_notionAPI_publication()['body']
+    """
+    DB Indexing
+    """
+    paper_data = load_notionAPI_publication()['body']
     pat_data = load_notionAPI_patents()['body']
+
     # Data Create or Update
-    temp = []
-    for d in pub_data:
-        pub, created = Publication.objects.update_or_create(
-            title=d['title'])
-        pub.label = d['label']
-        pub.paper_link = d['paper_link']
-        pub.assign = d['assign']
-        pub.thesis = d['thesis']
-        pub.year = d['year']
-        pub.save()
-        temp.append(d['title'])
+    temp_pub = []
+    temp_pat = []
+    temp_year = []
+    temp_patent_year = []
+
+    for d in paper_data:
+        paper, created = Paper.objects.update_or_create(title=d['title'])
+        paper.label = d['label']
+        paper.paper_link = d['paper_link']
+        paper.assign = d['assign']
+        paper.thesis = d['thesis']
+        if d['year'] != None:
+            obj, created = Year.objects.get_or_create(
+                year=d['year'])
+            paper.year.add(obj)
+            temp_year.append(d['year'])
+            paper.save()
+        else:
+            paper.save()
+        temp_pub.append(d['title'])
 
     for d in pat_data:
         pat, created = Patents.objects.update_or_create(
@@ -40,20 +56,34 @@ def set_data():
         pat.country = d['country']
         pat.num = d['num']
         pat.assign = d['assign']
-        pat.year = d['year']
+        if d['year'] != None:
+            obj, created = PatentYear.objects.get_or_create(year=d['year'])
+            pat.year.add(obj)
+            temp_patent_year.append(d['year'])
+            pat.save()
         pat.save()
-        temp.append(d['title'])
+        temp_pat.append(d['title'])
 
     # Data Delete
-    for db in Publication.objects.all():
-        if not db.title in temp:
-            Publication.objects.get(title=db.title).delete()
+    for db in Year.objects.all():
+        if not db.year in temp_year:
+            Year.objects.get(title=db.year).delete()
+    for db in PatentYear.objects.all():
+        if not db.year in temp_patent_year:
+            PatentYear.objects.get(title=db.year).delete()
+
+    for db in Paper.objects.all():
+        if not db.title in temp_pub:
+            Paper.objects.get(title=db.title).delete()
     for db in Patents.objects.all():
-        if not db.title in temp:
+        if not db.title in temp_pat:
             Patents.objects.get(title=db.title).delete()
 
 
 def load_notionAPI_publication():
+    """
+    Data Query
+    """
     url = f"https://api.notion.com/v1/databases/{Publication_Database_ID}/query"
     headers = {
         'Authorization': f'Bearer {Internal_Integration_Token}',
@@ -97,7 +127,6 @@ def load_notionAPI_publication():
         year = r['properties']['year']['select']['name']
         assign = ', '.join([l['name'] for l in r['properties']['assign']
                             ['multi_select']]) if 'assign' in r['properties'] else 'None'
-
         data.append({
             'title': title,
             'label': label,
@@ -114,6 +143,9 @@ def load_notionAPI_publication():
 
 
 def load_notionAPI_patents():
+    """
+    Data Query
+    """
     url = f"https://api.notion.com/v1/databases/{Patents_Database_ID}/query"
     headers = {
         'Authorization': f'Bearer {Internal_Integration_Token}',

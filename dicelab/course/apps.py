@@ -1,3 +1,4 @@
+""" Import Django Apps Functions """
 from django.apps import AppConfig
 
 

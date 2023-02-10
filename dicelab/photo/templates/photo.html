@@ -1,0 +1,101 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type='text/css' href="{% static 'css/card.css' %}">
+<link rel="stylesheet" type='text/css' href="{% static 'css/photo.css' %}">
+<script type="text/javascript">
+    window.onload = function(){
+        var matches = document.getElementsByClassName("nav-link");
+        for(var i=0; i< matches.length;i++){
+            matches[i].classList.remove('active');
+        }
+        var target = document.getElementById("photo").className += ' active';
+    };
+</script>
+<div>
+    <div
+    class="Category"
+    style="
+      background: url('{% static 'image/banner.jpg' %}');
+      background-size: cover;
+      background-position: center center;
+    "
+  >
+        <div class="container">
+            <h3>PHOTO</h3>
+        </div>
+    </div>
+    <div class="container">
+        <div class="Contents">
+            {% for a in activity %}
+            {% cycle '<div class="row">' '' %}
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="card_frame">
+                    <div class="card_item">
+                        <div>
+                            <img src="{% get_static_prefix %}image/{{a.title}}.jpg" alt="loading" width="100%"
+                                class="school_image">
+                        </div>
+                        <h6>
+                            <p>
+                                {{a.date|date:"Y년 m월"}} | {{a.title}}
+                            </p>
+                        </h6>
+                    </div>
+                </div>
+            </div>
+            {% cycle '' '</div>' %}
+            {% if forloop.last %}
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+<!-- 
+<div>
+    <div class="Category">
+        <div class="container">
+            <h4>Seasonal School</h4>
+        </div>
+    </div>
+    <div class="container">
+        <div class="Contents">
+            {% for s in school %}
+            {% cycle '<div class="row">' '' %}
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="card_frame">
+                    <div class="card_item">
+                        <div>
+                            <img src="{% get_static_prefix %}image/{{s.title}}.jpg" alt="loading" width="100%"
+                                class="school_image">
+                        </div>
+                        <h6>
+                            <p>
+                                {{s.title}}
+                            </p>
+                        </h6>
+                        <div class="clearfix">
+                            <div class="text">
+                                <ul>
+                                    {% for l in s.lecture.all %}
+                                    <li>
+                                        <p>{{l.name}} <a href="{{l.url}}">[link]</a></p>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% cycle '' '</div>' %}
+            {% if forloop.last %}
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div> -->
+
+</div>
+
+{% endblock %}

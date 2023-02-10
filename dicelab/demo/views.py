@@ -1,14 +1,20 @@
+"""
+Modules for Demo Page
+"""
 from django.shortcuts import render
 from .models import Demo
-import json
-from .tasks import *
+from .tasks import set_data
 
 # Create your views here.
 
 
 def demo(request):
+    """
+    Demo 페이지 렌더링 함수
+    """
     # set_data()
-    demo = Demo.objects.all().order_by('-date')
+    demo = Demo.objects.exclude(date__exact='').exclude(video__exact='').order_by('-date')
+    print(demo)
     demo_list = []
     for n in demo:
         temp = {}

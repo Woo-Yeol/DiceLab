@@ -14,67 +14,88 @@
 </script>
 
 <section
-    style="background: url('{% static 'image/main_bg.jpg' %}'); background-size:cover; background-position:center center;">
-    <div class="text-center" style="padding: 25px 48px;">
+    style="background: url('{% static 'image/background.jpg' %}'); background-size:cover; background-position:center center;">
+    <div class="text-center" style="padding: 5% 48px;">
         <img src="{% static 'image/title.png'%}" class="img-fluid" style="width:80%; max-width:1000px">
     </div>
 </section>
 {% endblock %}
 
 {% block content %}
-<div style="padding: 0px 48px;">
-    <hr style="width: 100%;">
-</div>
 
 <div style="display:block">
     <!-- Introduction -->
     <section style="padding: 24px 48px;">
         <div style="vertical-align:middle; width:100%;">
             <div class="container" style="max-width: 1000px;">
+                <div class="div-hr"><hr></div>
                 <h3 style="color: rgb(131,2,22);">Introduction</h3>
                 <div>
-                    <p>
+                    <p align="center">
                         We aim at developing deep intelligence systems by understanding various cognitive environments
-                        based on language and vision technologies. Our research interests are topics with deep learning,
-                        machine
-                        learning, natural language processing, computer vision, information
-                        retrieval, etc.</p>
+                        based on language and vision technologies. </p>
                 </div>
-                <br>
-                <ul>
-                    <li>
-                        <p>Current Research Topics</p>
-                        <ul>
-                            <li>Text Summarization (NLP)</li>
-                            <li>Text Classification (NLP)</li>
-                            <li>Dialog System (NLP)</li>
-                            <li>Question Answering (NLP)</li>
-                            <li>Visual Question Answering (NLP + CV)</li>
-                            <li>Object Detection & Tracking (CV)</li>
-                            <li>Face Recognition & Masking (CV)</li>
-                            <li>Medical Image Segmentation (CV)</li>
-                            <li>Activity Recognition (CV)</li>
-                            <li>Super-Resolution (CV)</li>
-                        </ul>
-                    </li>
-                </ul>
+                <div class="text-center">
+                    <img src="{% static 'image/area.png' %}" class="img-fluid" style="width:100%; max-width:1000px">
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Area Image -->
+    <!-- News -->
     <section style="padding: 24px 48px;">
-        <div class="text-center">
-            <img src="{% static 'image/area.png' %}" class="img-fluid" style="width:100%; max-width:1000px">
+        <div style="vertical-align:middle; width:100%;">
+            <div class="container" style="max-width: 1000px;">
+                <div class="news-container" style="display: inline-flex; width:100%">
+                    <div class="news-left">
+                        <hr>
+                        <h3 style="color: rgb(131,2,22);">DICE NEWS</h3><br>
+                        <!-- <p> 설명을 써주세요. </p><br> -->
+                        <a href="{% url 'news' %}">VIEW MORE</a>
+                        <img src="{% static 'image/gear.svg' %}" class="img-fluid" style="width:100%; max-width:1000px">
+                    </div>
+                    <div class="news-right">
+                        <hr>
+                        <table>
+                            <colgroup>
+                                <col style="width: 20%;">
+                                <col style="width: 80%;">
+                            </colgroup>
+                            <tbody>
+                                {% for news in recent_news %}
+                                <tr>
+                                    <td align="center"><p style="font-size:1.3rem;">{{news.date}}</p></td>
+                                    <td align="left">
+                                        <a href="{% url 'news' %}#{{news.date}}">
+                                            <div style="display:inline-flex">
+                                                <h1 class="news-title">{{news.title}}</h1>
+                                            </div>
+                                            {% for content in news.content %}
+                                                {% if forloop.first %}
+                                                <p class="gray-p">{{content.block}}</p>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr align="right" width: "50%;">
+                </div>
+            </div>
         </div>
     </section>
 
-    <div style="padding: 0px 48px;">
-        <hr style="width: 100%;">
-    </div>
-
     <!-- Image Slide -->
     <section style="padding : 24px 48px;">
+        <div class="container" style="max-width: 1000px;">
+        <div class="div-hr"><hr></div>
+        <div class="photo">
+            <h3 style="color: rgb(131,2,22);">Photo</h3>
+            <a class="gray-p" style="text-align: right" href="{% url 'photo' %}">VIEW MORE</a>
+        </div>
         <div id="carouselExampleDark" class="carousel carousel-dark slide mx-auto"
             style="width: 100%; height:auto; max-width:1000px; overflow: hidden;" data-bs-ride="carousel">
             <div class="carousel-indicators">
@@ -88,14 +109,6 @@
                     aria-label="Slide 4"></button>
                 <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="4"
                     aria-label="Slide 5"></button>
-                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="5"
-                    aria-label="Slide 6"></button>
-                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="6"
-                    aria-label="Slide 7"></button>
-                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="7"
-                    aria-label="Slide 8"></button>
-                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="8"
-                    aria-label="Slide 9"></button>
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
@@ -129,30 +142,6 @@
                         <h5>Summer School 2019</h5>
                     </div>
                 </div>
-                <div class="carousel-item">
-                    <img src="{% static 'image/aigrandchallenge2019.jpg'%}" class="d-block img-fluid w-100" alt="...">
-                    <div class="carousel-caption d-md-block">
-                        <h5>AI Grand Challenge 2019</h5>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="{% static 'image/acl2019.jpg'%}" class="d-block img-fluid w-100" alt="...">
-                    <div class="carousel-caption d-md-block">
-                        <h5>ACL 2019</h5>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="{% static 'image/winterschool2018.jpg'%}" class="d-block img-fluid w-100" alt="...">
-                    <div class="carousel-caption d-md-block">
-                        <h5>Winter School 2018</h5>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="{% static 'image/summerschool2018.jpg'%}" class="d-block img-fluid w-100" alt="...">
-                    <div class="carousel-caption d-md-block">
-                        <h5>Summer School 2018</h5>
-                    </div>
-                </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"
                 data-bs-slide="prev">
@@ -165,12 +154,14 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
+    </div>
     </section>
 
     <!-- Recruit -->
     <section style="padding : 24px 48px;">
         <div style="width: 100%; vertical-align:middle;" class="text-left mx-auto">
             <div class="container" style="max-width: 1000px;">
+                <div class="div-hr"><hr></div>
                 <h3 style="color: rgb(131,2,22); padding : 10px 0px;">Recruiting</h3>
                 <p> I'm seeking self-motivated MS and PhD students who will perform research for deep learning,
                     machine learning, natural languageprocessing, computer vision, information retrieval, etc. Please
@@ -180,35 +171,32 @@
         </div>
     </section>
 
-    <div style="padding: 0px 48px;">
-        <hr style="width: 100%;">
-    </div>
 
     <!-- Location -->
     <section style="padding : 24px 48px;">
         <div style="width: 100%; vertical-align:middle;" class="text-left mx-auto">
             <div class="container" style="max-width: 1000px;">
-                <h3 style="color: rgb(131,2,22); padding : 10px 0px;">Location</h3>
+                <div class="div-hr"><hr></div>
                 <div class="location">
-                    <ul>
-                        <li>Professor office: Room 434</li>
-                        <li>Student office: Room 412 </li>
-                        <li>Address: Engineering building 2, 1600, Chungjeol-ro, Byeongcheon-myeon, Dongnam-gu,
-                            Cheonan-si,
-                            Chungcheongnam-do 31253 Republic of Korea </li>
-                    </ul>
-                    <!-- <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3196.2530740714483!2d127.2797297078474!3d36.76449586840307!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357b2ac6c614c717%3A0x820bda83618bd53b!2z7ZWc6rWt6riw7Iig6rWQ7Jyh64yA7ZWZ6rWQIOygnDHsuqDtjbzsiqQ!5e0!3m2!1sko!2skr!4v1640316212011!5m2!1sko!2skr"
-                    width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe> -->
-                    <iframe
+                    <div class="location-left">
+                        <h3 style="color: rgb(131,2,22); padding : 10px 0px;">Location</h3>
+                        <ul>
+                            <li>Professor office: Room 434</li>
+                            <li>Student office: Room 412 </li>
+                            <li>Address: Engineering building 2, 1600, Chungjeol-ro, Byeongcheon-myeon, Dongnam-gu,
+                                Cheonan-si,
+                                Chungcheongnam-do 31253 Republic of Korea </li>
+                        </ul>
+                    </div>
+                    <div class="location-right">
+                        <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3196.2530740714483!2d127.2797297078474!3d36.76449586840307!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357b2ac6c614c717%3A0x820bda83618bd53b!2z7ZWc6rWt6riw7Iig6rWQ7Jyh64yA7ZWZ6rWQIOygnDHsuqDtjbzsiqQ!5e0!3m2!1sko!2skr!4v1640316212011!5m2!1sko!2skr"
                         width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                    <!-- <div class="map" style="max-width: 40%;"></div> -->
                 </div>
-                <div class="address" style="max-width: 60%;">
-
-                </div>
-                <div class="map" style="max-width: 40%;"></div>
-
+                <!-- <div class="address" style="max-width: 60%;">
+                </div> -->
             </div>
         </div>
 </div>

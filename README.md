@@ -1,5 +1,6 @@
 # 🎲**DICE LAB - HomePage**
-2021-08-04 ~ 2022-01-29 
+
+2021-08-04 ~ 2023-02-10
 
 ### DICELAB Introduce Page
 
@@ -8,13 +9,21 @@
 Notion DB 데이터를 Web Server와 주기적으로 동기화하는 비동기 큐 작업을 구현하여
 최신연구동향을 1시간마다 갱신해 제공할 수 있도록 개발했습니다.
 
+# 📖 **Manual**
+
+### [Version #1](./docs/README.md)
+
+### [Develop Guide](./docs/MANUAL.md)
+
 # **✋ Collaborator**
 
 ### [Woo-yeol](https://github.com/Woo-yeal)
+
 ### [honeyuheony](https://github.com/honeyuheony)
 
 # 🖥 Project Example
-<div align="center"><img src="./DiceLab.gif" width='800px'></div>
+
+<div align="center"><img src="./DiceLab_v2.gif" width='800px'></div>
 
 # **⚙️ Development Environment**
 
@@ -39,64 +48,10 @@ Notion DB 데이터를 Web Server와 주기적으로 동기화하는 비동기 �
   <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"></a>&nbsp
  </p>
 
-|Part|Version|
-|------|---|
-|**Front-End**|Django Templates + Bootstrap
-|**Back-End**|Back : Python 3.8.5 + Django 3.0 + Redis  
-|**Database**|Sqlite3
-|**Notion API**|Version : 2021-08-16
-|**Distribution**|AWS-LightSail
-
-# 📖 **Manual**
-
-### **Django Web Server**
-1. Git Clone
-    
-    `git clone https://github.com/Woo-Yeol/DiceLab.git`
-    
-2. 가상 환경 생성 및 종속 세팅
-    
-    `python -m venv [가상환경 명]`
-    
-    window : 
-    
-    `source [가상환경 명]/Scripts/activate` 
-    
-    mac : 
-    
-    `source [가상환경 명]/bin/activate`
-    
-    `pip install -r requirements.txt`
-    
-3. Migration
-    
-    `python manage.py createsuperuser "username"`
-    
-    `python manage.py makemigrations`
-    
-    `python manage.py migrate`
-    
-    `python manage.py runserver`
-    
-
-### Celery setting (with redis)
-
-1. Run redis
-    
-    `redis-server`
-    
-2. Run Celery-Beat
-    
-    Start new Terminal and Set venv
-    
-    `python -m venv [가상환경 명]`
-    window : 
-    
-    `celery -A [Project Name] -l info -B gevent`
-    
-    mac : 
-    
-    `celery -A [Project Name] worker -l info -B` 
-<aside>
-💡 1시간 간격으로 Notion DB와 Django server가 동기화 됩니다.
-</aside>
+| Part             | Version                                  |
+| ---------------- | ---------------------------------------- |
+| **Front-End**    | Django Templates + Bootstrap             |
+| **Back-End**     | Back : Python 3.8.5 + Django 3.0 + Redis |
+| **Database**     | Sqlite3                                  |
+| **Notion API**   | Version : 2021-08-16                     |
+| **Distribution** | AWS-LightSail                            |

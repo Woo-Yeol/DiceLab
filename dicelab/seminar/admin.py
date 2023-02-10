@@ -1,4 +1,6 @@
-from io import SEEK_CUR
+"""
+Modules for Admin Page
+"""
 from django.contrib import admin
 from .models import Seminar
 # Register your models here.

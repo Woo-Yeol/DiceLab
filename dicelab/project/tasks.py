@@ -1,10 +1,13 @@
+"""
+Modules for Data Query & DB Indexing
+"""
 import json
 from json import loads
 from typing import Dict
 import urllib3
 from django.conf import settings
 from celery import shared_task
-from .models import Project, AI_challenge
+from .models import Project, AiChallenge
 
 
 # 환경 변수 가져오기
@@ -20,9 +23,14 @@ Notion = getattr(settings, 'NOTION_VERSION', 'Notion-version')
 
 @shared_task
 def set_data():
+    """
+    DB Indexing
+    """
     p_data = load_notionAPI_project()['body']
     ai_data = load_notionAPI_ai_challenge()['body']
-    temp = []
+    temp_p = []
+    temp_a = []
+
     for d in p_data:
         p, created = Project.objects.update_or_create(title=d['title'])
         p.date = d['date']
@@ -31,9 +39,10 @@ def set_data():
         p.area = d['area']
         p.label = d['label']
         p.save()
-        temp.append(d['title'])
+        temp_p.append(d['title'])
+
     for d in ai_data:
-        a, created = AI_challenge.objects.update_or_create(title=d['title'])
+        a, created = AiChallenge.objects.update_or_create(title=d['title'])
         a.date = d['date']
         a.status = d['status']
         a.assign = d['assign']
@@ -42,17 +51,21 @@ def set_data():
         a.award = d['award']
         a.link = d['link']
         a.save()
-        temp.append(d['title'])
+        temp_a.append(d['title'])
+
     # Data Delete
     for db in Project.objects.all():
-        if not db.title in temp:
+        if not db.title in temp_p:
             Project.objects.get(title=db.title).delete()
-    for db in AI_challenge.objects.all():
-        if not db.title in temp:
-            AI_challenge.objects.get(title=db.title).delete()
+    for db in AiChallenge.objects.all():
+        if not db.title in temp_a:
+            AiChallenge.objects.get(title=db.title).delete()
 
 
 def load_notionAPI_ai_challenge():
+    """
+    Data Query
+    """
     url = f"https://api.notion.com/v1/databases/{AI_Challenge_Database_ID}/query"
     headers = {
         'Authorization': f'Bearer {Internal_Integration_Token}',
@@ -117,6 +130,9 @@ def load_notionAPI_ai_challenge():
 
 
 def load_notionAPI_project():
+    """
+    Data Query
+    """
     url = f"https://api.notion.com/v1/databases/{Projects_Database_ID}/query"
     headers = {
         'Authorization': f'Bearer {Internal_Integration_Token}',
@@ -124,14 +140,35 @@ def load_notionAPI_project():
         "Content-Type": "application/json"
     }
     filter = {
-        "or": [
+        "and": [
+            {
+                "or": [
+                    {
+                        "property": "Status",
+                        "select": {
+                                    "equals": "Completed",
+                        }
+                    },
+                    {
+                        "property": "Status",
+                        "select": {
+                            "equals": "Doing",
+                        }
+                    },
+                ]
+            },
             {
                 "property": "Project",
-                "text": {
-                            "is_not_empty": True
+                "title": {
+                            "is_not_empty": True,
                 }
             },
-            
+            {
+                "property": "Due",
+                "date": {
+                    "is_not_empty": True,
+                }
+            }
         ]
     }
     sorts = [
@@ -156,11 +193,11 @@ def load_notionAPI_project():
     for r in source['results']:
         title = r['properties']['Title']['title'][0]['plain_text']
         status = r['properties']['Status']['select']['name']
-        area =  r['properties']['Area']['select']['name'] if r['properties']['Area']['select'] else ''
+        area = r['properties']['Area']['select']['name'] if r['properties']['Area']['select'] else ''
         label = r['properties']['Label']['select']['name'] if r['properties']['Label']['select'] else ''
         assign = ', '.join([l['name'] for l in r['properties']['Assign']
-                            ['people']]) if 'Assign' in r['properties'] else 'None'
-        date = f"{r['properties']['Due']['date']['start']} ~ {r['properties']['Due']['date']['end']}"
+                            ['people']]) if 'Assign' in r['properties'] else ''
+        date = f"{r['properties']['Due']['date']['start']} ~ {r['properties']['Due']['date']['end']}" if r['properties']['Due']['date'] else ''
 
         data.append({
             'title': title,

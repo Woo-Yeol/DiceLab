@@ -1,10 +1,16 @@
-from django.shortcuts import render
-from .tasks import *
-from .models import News
+"""
+Modules for News Page
+"""
 import json
+from django.shortcuts import render
+from .tasks import set_data
+from .models import News
 
 
 def news(request):
+    """
+    News Page 렌더링 함수
+    """
     # set_data()
     news = News.objects.all().order_by('-date')
     news_list = []

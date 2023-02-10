@@ -1,45 +1,117 @@
 div.carousel-inner img {
-    margin: auto;
-    top: -100%;
-    bottom: -100%;
-    overflow: hidden;
+  margin: auto;
+  top: -100%;
+  bottom: -100%;
+  overflow: hidden;
 }
 
 div.carousel-inner h5 {
-    color: azure;
-    display: none;
+  color: azure;
+  display: none;
 }
 
 .container {
-    max-width: 1920px;
-    margin: auto auto;
+  max-width: 1920px;
+  margin: auto auto;
 }
 
 .container p {
-    font-size: 1rem;
-    vertical-align: baseline;
+  font-size: 1.2rem;
+  vertical-align: baseline;
+}
+
+.news-left {
+  width: 40%;
+}
+
+.news-left hr {
+  border: solid 2px;
+  width: 80%;
+  margin-left: 10;
+}
+
+.news-right {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+
+.news-right hr {
+  border: solid 2px;
+  width: 100%;
+  margin-left: 10;
+}
+
+.div-hr {
+  width: 100%;
+}
+
+.div-hr hr {
+  border: solid 2px;
+  width: 23%;
+  margin-left: 10;
+}
+
+.news-right td {
+  padding: 3% 0px;
+  border-bottom: 0.13rem solid #c5c5c5;
+}
+
+.location {
+  display: inline-flex;
+  width: 100%;
+}
+
+.location-left {
+  width: 100%;
+}
+
+.location-right {
+  width: 100%;
+}
+
+.news-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #333;
+  word-break: keep-all;
+  text-overflow: ellipsis;
+}
+
+.news-title::before {
+  content: "NEWS";
+  font-weight: 700;
+  background: #333;
+  display: inline-block;
+  color: #fff;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 1rem;
+  margin-right: 10px;
+  text-decoration: none;
+  padding: 3px 4px;
+}
+
+.photo {
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.gray-p {
+  font-size: 0.8rem;
+  color: #8b8b8b;
+  text-overflow: ellipsis;
 }
 
 @media (max-width: 768px) {
-    .container {
-        width: 100%;
-    }
+  .container {
+    width: 100%;
+  }
 }
 
 @media (min-width: 768px) {
-    div.carousel-inner h5 {
-        display: inherit
-    }
-
-    .location {
-        display: flex;
-    }
-
-    .location ul {
-        max-width: 60%;
-    }
-
-    .location iframe {
-        max-width: 40%;
-    }
+  div.carousel-inner h5 {
+    display: inherit;
+  }
 }

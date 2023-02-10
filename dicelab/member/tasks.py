@@ -1,10 +1,13 @@
-from celery import shared_task
-from django.conf import settings
-import urllib3
-from typing import Dict
+"""
+Modules for Data Query & DB Indexing
+"""
 import json
 from json import loads
-from .models import Dissertation, Master, Research_interests, Linked, Graduated, Alumni, Team, Project
+from typing import Dict
+import urllib3
+from celery import shared_task
+from django.conf import settings
+from .models import Thesis, Master, ResearchInterests, Linked, Graduated, Alumni, Team, Project
 
 http = urllib3.PoolManager()
 Member_Graduate_Database_ID = getattr(
@@ -30,14 +33,17 @@ headers = {
 
 @shared_task
 def set_data():
-
+    """
+    DB Indexing
+    """
     temp = []
+    temp_alumni = []
     temp_master = []
     research_interests_temp = []
     linked_temp = []
     team_temp = []
     project_temp = []
-    dissertation_temp = []
+    thesis_temp = []
 
     # Data Create or Update
     # Graduate
@@ -53,14 +59,14 @@ def set_data():
         count = 0
         for r in d['research_interests']:
             if count < 3:
-                obj, created = Research_interests.objects.get_or_create(
+                obj, created = ResearchInterests.objects.get_or_create(
                     title=r)
                 g.research_interests.add(obj)
                 research_interests_temp.append(r)
                 g.save()
                 count += 1
         g.linked.clear()
-        if d['linked'] != None:
+        if d['linked'] is not None:
             for key, value in d['linked'].items():
                 obj, created = Linked.objects.get_or_create(
                     title=key.replace(" : ", ""), link=value)
@@ -78,30 +84,34 @@ def set_data():
             a.course = d['course']
         else:
             a.course = ''
+        a.team.clear()
         obj, created = Team.objects.get_or_create(title=d['team'])
         a.team.add(obj)
         team_temp.append(obj.title)
         a.save()
         if d['project'] != None:
+            a.project.clear()
             obj, created = Project.objects.get_or_create(
                 title=d['project'], year=d['graduate_year'])
             a.project.add(obj)
             project_temp.append(obj.title)
             a.save()
-        temp.append(d['name'])
+        temp_alumni.append(d['name'])
     # Master
     data = load_notionAPI_member_master()['body']
     for d in data:
         g, created = Master.objects.update_or_create(
             name=d['name'])
         g.graduate_year = d['graduate_year']
+        g.course = d['course']
         g.email = d['email']
         g.pic = d['pic']
-        if d['dissertation'] != None:
-            obj, created = Dissertation.objects.update_or_create(
-                title=d['dissertation'], paper_link=d['paper_link'], slide_link=d['slide_link'])
-            dissertation_temp.append(obj)
-            g.dissertation.add(obj)
+        g.employment = d['employment']
+        if d['thesis'] != None:
+            obj, created = Thesis.objects.update_or_create(
+                title=d['thesis'], paper_link=d['paper_link'], slide_link=d['slide_link'])
+            thesis_temp.append(obj)
+            g.thesis.add(obj)
             g.save()
         g.linked.clear()
         if d['linked'] != None:
@@ -118,15 +128,15 @@ def set_data():
         if not db.name in temp:
             Graduated.objects.get(name=db.name).delete()
     for db in Alumni.objects.all():
-        if not db.name in temp:
+        if not db.name in temp_alumni:
             Alumni.objects.get(name=db.name).delete()
     for db in Master.objects.all():
         if not db.name in temp_master:
             Master.objects.get(name=db.name).delete()
 
-    for db in Research_interests.objects.all():
+    for db in ResearchInterests.objects.all():
         if not db.title in research_interests_temp:
-            Research_interests.objects.get(title=db.title).delete()
+            ResearchInterests.objects.get(title=db.title).delete()
     for db in Linked.objects.all():
         if not db.title in linked_temp:
             Linked.objects.get(title=db.title).delete()
@@ -136,12 +146,15 @@ def set_data():
     for db in Project.objects.all():
         if not db.title in project_temp:
             Project.objects.get(title=db.title).delete()
-    for db in Dissertation.objects.all():
-        if not db in dissertation_temp:
+    for db in Thesis.objects.all():
+        if not db in thesis_temp:
             db.delete()
 
 
 def load_notionAPI_member_master():
+    """
+    Data Query
+    """
     url = f"https://api.notion.com/v1/databases/{Member_Master_Database_ID}/query"
     filter = {  # 가져올 데이터 필터
         "or": [
@@ -180,15 +193,14 @@ def load_notionAPI_member_master():
             name = r['properties']['name']['title'][0]['plain_text']
         except:
             continue
-
         try:
             graduate_year = r['properties']['graduate_year']['select']['name']
         except:
             graduate_year = ''
         try:
-            dissertation = r['properties']['dissertation']['select']['name']
+            thesis = r['properties']['thesis']['rich_text'][0]['plain_text']
         except:
-            dissertation = ''
+            thesis = ''
         try:
             email = r['properties']['email']['email'].replace("@", "'at'")
         except:
@@ -210,6 +222,10 @@ def load_notionAPI_member_master():
         except:
             linked = {}
         try:
+            course = r['properties']['course']['select']['name']
+        except:
+            course = ''
+        try:
             pic = r['properties']['pic']['files'][0]['name']
         except:
             pic = ''
@@ -221,15 +237,21 @@ def load_notionAPI_member_master():
             slide_link = r['properties']['slide_link']['url']
         except:
             slide_link = ''
+        try:
+            employment = r['properties']['employment']['rich_text'][0]['plain_text']
+        except:
+            employment = ''
         data.append({
             'name': name,
+            'course':course,
             'graduate_year': graduate_year,
-            'dissertation': dissertation,
+            'thesis': thesis,
             'email': email,
             'linked': linked,
             'pic': pic,
             'paper_link': paper_link,
-            'slide_link': slide_link
+            'slide_link': slide_link,
+            'employment': employment
         })
     return {
         'statusCode': 200,
@@ -238,6 +260,9 @@ def load_notionAPI_member_master():
 
 
 def load_notionAPI_member_graduate():
+    """
+    Data Query
+    """
     url = f"https://api.notion.com/v1/databases/{Member_Graduate_Database_ID}/query"
     filter = {  # 가져올 데이터 필터
         "or": [
@@ -334,6 +359,9 @@ def load_notionAPI_member_graduate():
 
 
 def load_notionAPI_member_alumni():
+    """
+    Data Query
+    """
     url = f"https://api.notion.com/v1/databases/{Member_Alumni_Database_ID}/query"
     filter = {  # 가져올 데이터 필터
         "or": [

@@ -1,9 +1,10 @@
+""" Import Django DB Models """
 from django.db import models
 
-# Create your models here.
-
-
 class Semester(models.Model):
+    """
+    하나의 학기들이 가지는 DB Table
+    """
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=20, blank=True)
     year = models.CharField(max_length=20, blank=True)
@@ -13,10 +14,13 @@ class Semester(models.Model):
 
 
 class Course(models.Model):
+    """
+    하나의 과목들이 가지는 DB Table
+    """
     code = models.CharField(max_length=10, default='',blank=True)
     name = models.CharField(max_length=100, blank=False, default='', primary_key=True)
     semester = models.ManyToManyField(
         Semester, related_name='semester')
 
     def __str__(self):
-        return self.name
+        return str(self.name)

@@ -1,51 +1,51 @@
-{% extends 'index.html' %}
-{% load static %}
-{% block content %}
-<link rel="stylesheet" type='text/css' href="{% static 'css/course.css' %}">
-<link rel="stylesheet" type='text/css' href="{% static 'css/card.css' %}">
+{% extends 'index.html' %} {% load static %} {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/course.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/card.css' %}" />
 <script type="text/javascript">
-    window.onload = function () {
-        var matches = document.getElementsByClassName("nav-link");
-        for (var i = 0; i < matches.length; i++) {
-            matches[i].classList.remove('active');
-        }
-        var target = document.getElementById("course").className += ' active';
-    };
+  window.onload = function () {
+    var matches = document.getElementsByClassName("nav-link");
+    for (var i = 0; i < matches.length; i++) {
+      matches[i].classList.remove("active");
+    }
+    var target = (document.getElementById("course").className += " active");
+  };
 </script>
 <div class="Course">
-    <div class="Category">
-        <div class="container">
-            <h4>Course</h4>
-        </div>
-    </div>
+  <div
+    class="Category"
+    style="
+      background: url('{% static 'image/banner.jpg' %}');
+      background-size: cover;
+      background-position: center center;
+    "
+  >
     <div class="container">
-        <div class="Contents">
-            {% for semester in semesters %}
-            <div class="card_frame">
-                <div class="card_item">
-                    <h6>
-                        <p>
-                            {{semester}}
-                        </p>
-                    </h6>
-                    <div class="clearfix">
-                        <div class="text">
-                            {% for course in courses %}
-                            {% for s in course.semester.all%}
-                            <ol>
-                                {% if semester == s %}
-                                <li>{{course.code}},{{course.name}}
-                                </li>
-                                {% endif %}
-                            </ol>
-                            {% endfor%}
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+      <h3>COURSE</h3>
     </div>
+  </div>
+  <div class="container">
+    <div class="Contents">
+      {% for semester in semesters %}
+      <div class="card_frame">
+        <div class="card_item">
+          <h6>
+            <p>{{semester}}</p>
+          </h6>
+          <div class="clearfix">
+            <div class="text">
+              {% for course in courses %} {% for s in course.semester.all%}
+              <ol>
+                {% if semester == s %}
+                <li>[{{course.code}}] {{course.name}}</li>
+                {% endif %}
+              </ol>
+              {% endfor%} {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -1,124 +1,104 @@
-{% extends 'index.html' %}
-{% load static %}
-{% block content %}
-<link rel="stylesheet" type='text/css' href="{% static 'css/card.css' %}">
-<link rel="stylesheet" type='text/css' href="{% static 'css/publication.css' %}">
+{% extends 'index.html' %} {% load static %} {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/card.css' %}" />
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'css/publication.css' %}"
+/>
 <script type="text/javascript">
-    window.onload = function () {
-        var matches = document.getElementsByClassName("nav-link");
-        for (var i = 0; i < matches.length; i++) {
-            matches[i].classList.remove('active');
-        }
-        var target = document.getElementById("publication").className += ' active';
-    };
+  window.onload = function () {
+    var matches = document.getElementsByClassName("nav-link");
+    for (var i = 0; i < matches.length; i++) {
+      matches[i].classList.remove("active");
+    }
+    var target = (document.getElementById("publication").className +=
+      " active");
+  };
 </script>
-<div class="International Papers">
-    <div class="Category">
-        <div class="container">
-            <h4>International Papers</h4>
-        </div>
-    </div>
+<div class="Publication">
+  <div
+    class="Category"
+    style="
+      background: url('{% static 'image/banner.jpg' %}');
+      background-size: cover;
+      background-position: center center;
+    "
+  >
     <div class="container">
-        <div class="Contents">
-            {% for pub in publication %}
-            {% if pub.label == "International Papers" %}
-            <div class="card_frame">
-                <div class="card_item">
-                    <h6>
-                        <p>
-                            {{pub.title}}
-                            <a href={{ pub.paper_link }}>[paper]</a>
-                        </p>
-                    </h6>
-                    <div class="clearfix">
-                        <div class="text">
-                            <ul>
-                                <li>
-                                    <p>{{pub.assign}}</p>
-                                </li>
-                                <li>
-                                    <p>{{pub.thesis}}, {{pub.year}}</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% endfor %}
-        </div>
+      <h3>PUBLICATION</h3>
     </div>
-</div>
-<div class="Domestic Papers">
-    <div class="Category">
-        <div>
-            <h4>Domestic Papers</h4>
-        </div>
-    </div>
+  </div>
     <div class="container">
-        <div class="Contents">
-            {% for pub in publication %}
-            {% if pub.label == "Domestic Papers" %}
-            <div class="card_frame">
-                <div class="card_item">
-                    <h6>
-                        <p>
-                            {{pub.title}}
-                            <a href={{ pub.paper_link }}>[paper]</a>
-                        </p>
-                    </h6>
-                    <div class="clearfix">
-                        <div class="text">
-                            <ul>
-                                <li>
-                                    <p>{{pub.assign}}</p>
-                                </li>
-                                <li>
-                                    <p>{{pub.thesis}}, {{pub.year}}</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% endfor %}
+      <div class="Contents">
+        <div class="label">
+          <h4>Papers</h4>
         </div>
+        {% for y in paper_year %}
+        <h5 class="Year">{{y}}</h5>
+        {% for p in paper %} {% for py in p.year.all %} {% if py == y %}
+        <div class="card_frame">
+          <div class="card_item">
+            <h6>
+              <p>
+                {{p.title}}
+                <a href="{{ p.paper_link }}">[paper]</a>
+              </p>
+            </h6>
+            <div class="clearfix">
+              <div class="text">
+                <ul>
+                  <li>
+                    <p>{{p.assign}}</p>
+                  </li>
+                  <li>
+                    <p>{{p.thesis}}, {{py}}</p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %} {% endfor %} {% endfor %} {% endfor %}
+      </div>
     </div>
+  </div>
 
-</div>
-<br>
-<div class="Patents">
-    <div class="Category">
-        <div>
-            <h4>Patents</h4>
-        </div>
-    </div>
-    <div class="container">
-        <div class="Contents">
-            {% for patent in patents %}
-            <div class="card_frame">
-                <div class="card_item">
-                    <h6>
-                        <p>
-                            {{patent.title}}
-                            <br>[{{patent.num}}]
-                        </p>
-                    </h6>
-                    <div class="clearfix">
-                        <div class="text">
-                            <ul>
-                                <li>
-                                    <p>{{patent.assign}}, {{patent.country}}, {{patent.year}}</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+  <br />
 
+  <div class="Patents">
+    <div class="container">
+      <div class="Contents">
+        <div class="label">
+          <h4>Patents</h4>
+        </div>
+        {% for y in patent_year %}
+        <h5 class="Year">{{y}}</h5>
+        {% for pat in patents %} {% for py in pat.year.all%} {% if py == y %}
+        <div class="card_frame">
+          <div class="card_item">
+            <h6>
+              <p>
+                {{pat.title}}
+                <a href="{{ pat.paper_link }}">[paper]</a>
+              </p>
+            </h6>
+            <div class="clearfix">
+              <div class="text">
+                <ul>
+                  <li>
+                    <p>{{pat.assign}}</p>
+                  </li>
+                  <li>
+                    <p>{{pat.num}}, {{pat.country}}, {{py}}</p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %} {% endfor %} {% endfor %} {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endblock %}
 </div>
-{% endblock %}

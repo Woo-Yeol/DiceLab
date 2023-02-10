@@ -54,8 +54,8 @@ INSTALLED_APPS = [
     'project.apps.ProjectConfig',
     # Publication
     'publication.apps.PublicationConfig',
-    # School
-    'school.apps.SchoolConfig',
+    # Photo
+    'photo.apps.PhotoConfig',
     # Seminar
     'seminar.apps.SeminarConfig',
     # Main
@@ -130,7 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -150,13 +150,18 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'course', 'static'),
     os.path.join(BASE_DIR, 'project', 'static'),
     os.path.join(BASE_DIR, 'publication', 'static'),
-    os.path.join(BASE_DIR, 'school', 'static'),
+    os.path.join(BASE_DIR, 'photo', 'static'),
     os.path.join(BASE_DIR, 'seminar', 'static'),
     os.path.join(BASE_DIR, 'main', 'static'),
     os.path.join(BASE_DIR, 'demo', 'static')
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+# Media Files
+
+MEDIA_ROOT = Path(BASE_DIR, 'media')
+
+MEDIA_URL = 'media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -205,7 +210,9 @@ PATENTS_DATABASE_ID = get_secret('Patents_Database_ID')
 PROJECTS_DATABASES_ID = get_secret('Projects_Database_ID')
 AI_CHALLENGE_DATABASES_ID = get_secret('AI_Challenge_Database_ID')
 SEMINAR_DATABASE_ID = get_secret('Seminar_Database_ID')
+DEMO_DATABASE_ID = get_secret('Demo_Database_ID')
 INTERNAL_INTEGRATION_TOKEN = get_secret('Internal_Integration_Token')
+PHOTO_DATABASE_ID = get_secret('Photo_Database_ID')
 
 # celery
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379'

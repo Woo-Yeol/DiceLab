@@ -14,12 +14,22 @@
     };
 </script>
 <div>
-    <div class="Category">
+    <div
+    class="Category"
+    style="
+      background: url('{% static 'image/banner.jpg' %}');
+      background-size: cover;
+      background-position: center center;
+    "
+  >
         <div class="container">
-            <h4>Graduate Students</h4>
+            <h3>MEMBERS</h3>
         </div>
     </div>
     <div class="Contents">
+        <div class="label">
+            <h4>Graduate Students</h4>
+        </div>
         {% for g in graduated %}
         {% if g.admission_date|length %}
         {% cycle '<div class="row">' '' %}
@@ -45,8 +55,7 @@
                 </div>
                 <div class="text card-body">
                     <ul>
-                        {% if g.research_interests.all|length < 4 %}
-                        <li class="research_interests">
+                        {% if g.research_interests.all|length < 4 %} <li class="research_interests">
                             <h6>Research Interests</h6>
                             <ul>
                                 {% for r in g.research_interests.all %}
@@ -97,12 +106,10 @@
 </div>
 
 <div>
-    <div class="Category">
-        <div>
+    <div class="Contents" style="padding: 3% 0px 0px 0px;">
+        <div class="label">
             <h4>Ungraduate Students</h4>
         </div>
-    </div>
-    <div class="Contents" style="padding: 3% 0px 0px 0px;">
         {% for g in graduated %}
         {% if not g.admission_date|length %}
         {% cycle '<div class="row">' '' %}
@@ -166,7 +173,7 @@
 </div>
 <div class="Contents" style="padding:0px 0px 3% 0px;;">
     <div class="card_frame ">
-        <div class="card_item profile">
+        <div class="card_item profile text-only">
             <ul>
                 <li>
                     <h6>Undergraduate Research Program (URP)</h6>
@@ -178,6 +185,7 @@
                                 <li>
                                     4th grade :
                                     <ul>
+                                        {% if project_4th.all|length %}
                                         {% for p in project_4th%}
                                         <li>
                                             {% for a in p.alumni.all %}
@@ -186,12 +194,18 @@
                                             - {{p.title}}
                                         </li>
                                         {% endfor %}
+                                        {% else %}
+                                        <li>
+                                            Waiting...
+                                        </li>
+                                        {% endif %}
                                     </ul>
                                 </li>
                                 <li>
-                                    3th grade :
+                                    3rd grade :
                                     <ul>
-                                        {% for p in project_3th%}
+                                        {% if project_3rd.all|length %}
+                                        {% for p in project_3rd%}
                                         <li>
                                             {% for a in p.alumni.all %}
                                             {{a}}
@@ -199,6 +213,11 @@
                                             - {{p.title}}
                                         </li>
                                         {% endfor %}
+                                        {% else %}
+                                        <li>
+                                            Waiting...
+                                        </li>
+                                        {% endif %}
                                     </ul>
                                 </li>
                             </ul>
@@ -212,12 +231,10 @@
 </div>
 
 <div>
-    <div class="Category">
-        <div>
+    <div class="Contents" style="padding: 3% 0px 0px 0px;">
+        <div class="label">
             <h4>Alumni</h4>
         </div>
-    </div>
-    <div class="Contents" style="padding: 3% 0px 0px 0px;">
         {% for m in master %}
         {% if m.graduate_year|length %}
         {% cycle '<div class="row">' '' %}
@@ -230,7 +247,7 @@
                     <div class="name">
                         <h5>{{m.name}}</h5>
                         <div class="date">
-                            <h6 style="text-align: right;">M.S.</h6>
+                            <h6 style="text-align: right;">{{m.course}}</h6>
                             {% if m.graduate_year|length %}
                             <p style="margin-bottom:0px">
                                 {{m.graduate_year}}
@@ -239,26 +256,37 @@
                         </div>
                     </div>
                 </div>
-                <div class="text card-body">
-                    <ul>
-                        <li class="dissertation">
-                            <h6>Dissertation Title</h6>
+            <div class="text card-body">
+                <ul>
+                    <li class="thesis">
+                        {% for thesis in m.thesis.all %}
+                        <div class="thesis_links" style="display:flex; justify-content: space-between;">
+                                <h6>Thesis Title</h6>
+                                <h6 style="text-align: right;list-style-type: none !important;">
+                                    {% if thesis.paper_link %}
+                                    <a style="font-size:0.8rem;" href="{{thesis.paper_link}}">[Paper]</a>
+                                    {% endif %}
+                                    {% if thesis.slide_link %}
+                                    <a style="font-size:0.8rem;" href="{{thesis.slide_link}}">[Slide]</a>
+                                    {% endif %}
+                                </h6>
+                            </div>
                             <ul>
-                                {% for dissertation in m.dissertation.all %}
+                                <li style="font-size:1.1rem; word-break:keep-all; list-style-type: none !important;">
+                                    {{thesis.title}}</li>
+                            </ul>
+                            {% endfor %}
+                        </li>
+                        {% if m.employment|length %}
+                        <li class = "employment">
+                            <h6>Current Position</h6>
+                            <ul>
                                 <li>
-                                    <p>{{dissertation.title}}</p>
+                                    {{ m.employment }}
                                 </li>
-                                <li style="text-align: center;list-style: none;">
-                                {% if dissertation.paper_link %}
-                                    <a href="{{dissertation.paper_link}}">[Link]</a>
-                                {% endif %}
-                                {% if dissertation.slide_link %}
-                                    <a href="{{dissertation.slide_link}}">[Slide]</a>
-                                {% endif %}
-                                </li>
-                                {% endfor %}
                             </ul>
                         </li>
+                        {% else %}
                         <li class="contact">
                             <h6>Contact</h6>
                             <ul>
@@ -274,59 +302,60 @@
                                 {% endif %}
                             </ul>
                         </li>
-                    </ul>
-                </div>
-            </div>
+                        {% endif  %}
+            </ul>
         </div>
-        {% cycle '' '</div>' %}
-        {% if forloop.last %}
     </div>
-    {% endif %}
-    {% endif %}
-    {% endfor %}
-    <div class="Contents" style="padding:0px 0px 3% 0px; justify-content:center">
-        <div class="card_frame">
-            <div class="card_item profile">
-                <ul>
-                    <li>
-                        <h6>URP Students</h6>
-                    </li>
-                    <li>
-                        <div class="item">
-                            <div class="text_whole">
-                                <ul>
-                                    {% for key, value in project.items %}
-                                    <li>
-                                        {{key}}:
-                                        {% if value|length %}
-                                        {% for q in value %}
-                                        <ul>
-                                            <li>
-                                                {% for a in q.alumni.all %}
-                                                {{a}}
-                                                {% endfor %}
-                                                - {{q.title}}
-                                            </li>
-                                        </ul>
-                                        {% endfor%}
-                                        {% else %}
-                                        <ul>
-                                            <li>
-                                                {% for na in no_project_alumni.all %}
-                                                {{na}}
-                                                {% endfor %}
-                                            </li>
-                                        </ul>
-                                        {% endif %}
-                                    </li>
+</div>
+{% cycle '' '</div>' %}
+{% if forloop.last %}
+</div>
+{% endif %}
+{% endif %}
+{% endfor %}
+<div class="Contents" style="padding:0px 0px 3% 0px; justify-content:center">
+    <div class="card_frame">
+        <div class="card_item profile text-only">
+            <ul>
+                <li>
+                    <h6>URP Students</h6>
+                </li>
+                <li>
+                    <div class="item">
+                        <div class="text_whole">
+                            <ul>
+                                {% for key, value in project.items %}
+                                <li>
+                                    {{key}}:
+                                    {% if value|length %}
+                                    {% for q in value %}
+                                    <ul>
+                                        <li>
+                                            {% for a in q.alumni.all %}
+                                            {{a}}
+                                            {% endfor %}
+                                            - {{q.title}}
+                                        </li>
+                                    </ul>
                                     {% endfor%}
-                                </ul>
-                            </div>
+                                    {% else %}
+                                    <ul>
+                                        <li>
+                                            {% for na in no_project_alumni.all %}
+                                            {{na}}
+                                            {% endfor %}
+                                        </li>
+                                    </ul>
+                                    {% endif %}
+                                </li>
+                                {% endfor%}
+                            </ul>
                         </div>
-                    </li>
-                </ul>
-            </div>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}

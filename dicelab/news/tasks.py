@@ -1,10 +1,13 @@
-from celery import shared_task
-from django.conf import settings
-from django.core.cache import cache
+"""
+Import Preprocessing for DB Functions
+
+"""
 import json
-import urllib3
 from typing import Dict
 from json import loads
+from celery import shared_task
+import urllib3
+from django.conf import settings
 from .models import News
 
 
@@ -24,6 +27,9 @@ headers = {
 
 @shared_task
 def set_data():
+    """
+    DB Indexing
+    """
     data = load_notionAPI_news()['body']
     temp = []
     for d in data:
@@ -41,6 +47,9 @@ def set_data():
 
 
 def get_block(id):
+    """
+    id 값을 참조하여 Block Data Query
+    """
     url = f"https://api.notion.com/v1/blocks/{id}/children?page_size=100"
     response = http.request('GET',
                             url,  # json파일로 인코딩
@@ -61,6 +70,9 @@ def get_block(id):
 
 
 def print_block(data):
+    """
+    Block Print Func
+    """
     for d in data:
         print(d['block'])
         if 'child' in d:
@@ -68,6 +80,9 @@ def print_block(data):
 
 
 def load_notionAPI_news():
+    """
+    Data Query
+    """
     url = f"https://api.notion.com/v1/databases/{News_Database_ID}/query"
 
     filter = {  # 가져올 데이터 필터

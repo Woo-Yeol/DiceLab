@@ -1,6 +1,9 @@
+"""
+Modules for Admin Page
+"""
 from django.contrib import admin
-from .models import AI_challenge, Project
+from .models import AiChallenge, Project
 
 # Register your models here.
-admin.site.register(AI_challenge)
+admin.site.register(AiChallenge)
 admin.site.register(Project)

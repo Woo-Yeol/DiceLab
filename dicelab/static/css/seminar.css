@@ -1,78 +1,84 @@
 #dtOrderExample_filter {
-    text-align: right;
+  text-align: right;
 }
 
-#dtOrderExample_filter>label {
-    vertical-align: middle;
-    margin: 0;
+#dtOrderExample_filter > label {
+  vertical-align: middle;
+  margin: 0;
 }
 
-#dtOrderExample_filter>label>input {
-    margin: 10px 10px 10px 10px;
-    height: auto;
-    font-family: inherit;
-    border: 2px solid #999;
-    border-radius: 5px;
-    outline-style: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-
+#dtOrderExample_filter > label > input {
+  margin: 10px 10px 10px 10px;
+  height: auto;
+  font-family: inherit;
+  border: 2px solid #999;
+  border-radius: 5px;
+  outline-style: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
-
+.container > h3 {
+  padding: 10% 7%;
+}
 .container a {
-    color: blue;
-    text-decoration: none !important;
+  color: blue;
+  text-decoration: none !important;
 }
-
+.Category h3 {
+  /* 그림자 */
+  text-shadow: 2px 2px 6px black;
+  /* 글자 테두리 */
+  /* text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000; */
+}
 .table td.fit,
 .table th.fit {
-    white-space: nowrap;
-    width: 1%;
+  white-space: nowrap;
+  width: 1%;
 }
 
 .container {
-    width: 100%;
+  width: 100%;
 }
 
 .Contents {
+  width: 100%;
+  height: 100%;
+  padding-bottom: 1.5rem;
+  padding-top: 1.5rem;
+  padding-left: 48px;
+  padding-right: 48px;
+}
+
+@media (min-width: 768px) {
+  .seminar_content {
+    /* width: 100%; */
+    max-width: none;
+  }
+
+  .Contents {
     width: 100%;
     height: 100%;
     padding-bottom: 1.5rem;
     padding-top: 1.5rem;
     padding-left: 48px;
     padding-right: 48px;
+  }
 }
 
-@media (min-width: 768px) {
-    .container {
-        width: 100%;
-        max-width: none;
-    }
-
-    .Contents {
-        width: 100%;
-        height: 100%;
-        padding-bottom: 1.5rem;
-        padding-top: 1.5rem;
-        padding-left: 48px;
-        padding-right: 48px;
-    }
-}
-
-@media (min-width: 576px) {
-    .container {
-        max-width: none;
-    }
-}
+/* @media (min-width: 576px) {
+  .container {
+    max-width: none;
+  }
+} */
 
 @media (max-width: 768px) {
-    .container {
-        margin: 0px 0px;
-        padding: 0px;
-    }
+  /* .container {
+    margin: 0px 0px;
+    padding: 0px;
+  } */
 
-    .Contents {
-        padding: 0px 0px;
-    }
+  .Contents {
+    padding: 0px 0px;
+  }
 }
